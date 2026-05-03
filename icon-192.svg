@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" fill="#0a0a0b" rx="38"/>
+  <circle cx="96" cy="96" r="60" fill="none" stroke="#e8ff47" stroke-width="6"/>
+  <text x="96" y="78" text-anchor="middle" fill="#e8ff47" font-size="22" font-family="-apple-system,sans-serif" font-weight="700" letter-spacing="1">BJJ</text>
+  <text x="96" y="108" text-anchor="middle" fill="#e8ff47" font-size="16" font-family="-apple-system,sans-serif" font-weight="400" letter-spacing="3">OS</text>
+  <path d="M66 126 Q96 118 126 126" fill="none" stroke="#e8ff47" stroke-width="3" stroke-linecap="round"/>
+</svg>

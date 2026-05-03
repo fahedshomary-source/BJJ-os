@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="BJJ OS"/>
+<meta name="theme-color" content="#0a0a0b"/>
+<meta name="description" content="Your personal BJJ lifestyle OS — schedule, techniques, hydration, drilling, and habit tracking."/>
+<title>BJJ OS</title>
+<link rel="manifest" href="manifest.json"/>
+<style>
+:root{--bg:#0a0a0b;--s1:#141416;--s2:#1c1c1f;--s3:#242428;--b1:rgba(255,255,255,0.08);--b2:rgba(255,255,255,0.16);--acc:#e8ff47;--acc2:#ff6b35;--acc3:#4facfe;--tx:#f0f0f0;--tx2:#9a9a9a;--tx3:#4a4a4a;--ok:#4ade80;--err:#f87171;--warn:#fbbf24;--r:14px;--rs:8px;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);}
+body{color:var(--tx);font-family:-apple-system,'SF Pro Display',sans-serif;overflow:hidden;}
+.app{max-width:430px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column;background:var(--bg);}
+.hdr{padding:env(safe-area-inset-top,14px) 18px 12px;padding-top:max(env(safe-area-inset-top),14px);display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--b1);flex-shrink:0;}
+.hdr-l{display:flex;flex-direction:column;}
+.hdr-greet{font-size:10px;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase;}
+.hdr-title{font-size:19px;font-weight:600;color:var(--tx);margin-top:1px;}
+.badge{font-size:10px;padding:4px 10px;border-radius:20px;font-weight:500;border:1px solid;}
+.b-bjj{background:rgba(232,255,71,.14);color:var(--acc);border-color:rgba(232,255,71,.4);}
+.b-str{background:rgba(79,172,254,.14);color:var(--acc3);border-color:rgba(79,172,254,.4);}
+.b-rst{background:rgba(255,255,255,.06);color:var(--tx2);border-color:var(--b2);}
+.b-drl{background:rgba(255,107,53,.14);color:var(--acc2);border-color:rgba(255,107,53,.4);}
+.nav{display:flex;padding:8px 12px;gap:4px;border-bottom:0.5px solid var(--b1);overflow-x:auto;scrollbar-width:none;flex-shrink:0;}
+.nav::-webkit-scrollbar{display:none;}
+.nb{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid transparent;background:transparent;color:var(--tx2);font-size:12px;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.nb.on{background:var(--s2);color:var(--tx);border-color:var(--b2);}
+.ct{flex:1;overflow-y:auto;padding:14px 18px;padding-bottom:calc(80px + env(safe-area-inset-bottom));scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.ct::-webkit-scrollbar{display:none;}
+.sec{margin-bottom:20px;}
+.sl{font-size:10px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px;font-weight:500;}
+.card{background:var(--s1);border:0.5px solid var(--b1);border-radius:var(--r);padding:13px 15px;margin-bottom:9px;}
+.ct-title{font-size:13px;font-weight:500;color:var(--tx);}
+.ct-sub{font-size:11px;color:var(--tx2);margin-top:3px;line-height:1.5;}
+.tl{display:flex;flex-direction:column;}
+.tli{display:flex;gap:11px;align-items:flex-start;padding:8px 0;border-bottom:.5px solid var(--b1);}
+.tli:last-child{border-bottom:none;}
+.tlt{font-size:10px;color:var(--tx3);min-width:38px;padding-top:2px;font-variant-numeric:tabular-nums;}
+.tld{width:6px;height:6px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.d-w{background:var(--acc3);}.d-e{background:var(--ok);}.d-t{background:var(--acc);}.d-r{background:var(--tx3);}
+.tln{font-size:12px;font-weight:500;color:var(--tx);}
+.tlsub{font-size:11px;color:var(--tx2);margin-top:1px;line-height:1.4;}
+.wr{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
+.wc{width:34px;height:42px;border-radius:3px 3px 9px 9px;border:1.5px solid rgba(79,172,254,.2);cursor:pointer;overflow:hidden;display:flex;align-items:flex-end;background:var(--s2);transition:border-color .2s;}
+.wc.f{border-color:var(--acc3);}
+.wf{width:100%;transition:height .3s;}
+.wc.f .wf{background:var(--acc3);height:100%!important;}
+.wbtns{display:flex;gap:8px;margin-top:9px;}
+.wbtn{flex:1;padding:10px 6px;border-radius:var(--rs);border:1px solid var(--b2);background:var(--s2);color:var(--tx);font-size:13px;cursor:pointer;transition:all .15s;text-align:center;}
+.wbtn:active{transform:scale(.97);}
+.wbtn.wa{border-color:rgba(79,172,254,.4);background:rgba(79,172,254,.09);color:var(--acc3);}
+.wbtn.wr2{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.07);color:var(--err);}
+.smbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px;}
+.smb{padding:14px 8px;border-radius:var(--rs);border:1.5px solid var(--b2);background:var(--s2);color:var(--tx);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-align:center;line-height:1.4;}
+.smb:active{transform:scale(.97);}
+.smb.si{border-color:rgba(74,222,128,.5);background:rgba(74,222,128,.1);color:var(--ok);}
+.smb.sa{border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.1);color:var(--warn);}
+.smcts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:9px;}
+.smc{background:var(--s2);border-radius:var(--rs);padding:10px 6px;text-align:center;border:.5px solid var(--b1);}
+.smcn{font-size:22px;font-weight:600;line-height:1;}
+.smcl{font-size:10px;color:var(--tx2);margin-top:2px;}
+.smundo{width:100%;margin-top:8px;padding:10px;border-radius:var(--rs);border:1px solid var(--b2);background:var(--s2);color:var(--tx2);font-size:12px;cursor:pointer;}
+.smundo:active{transform:scale(.98);}
+.tc{background:var(--s1);border:.5px solid var(--b1);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;}
+.tc.x{border-color:rgba(232,255,71,.25);}
+.tch{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.tctitle{font-size:13px;font-weight:500;color:var(--tx);}
+.tcph{font-size:10px;color:var(--tx3);margin-top:2px;}
+.tcr{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.tcs{font-size:10px;padding:2px 8px;border-radius:20px;border:1px solid;}
+.sl0{background:rgba(251,191,36,.1);color:var(--warn);border-color:rgba(251,191,36,.35);}
+.sl1{background:rgba(79,172,254,.1);color:var(--acc3);border-color:rgba(79,172,254,.35);}
+.sl2{background:rgba(74,222,128,.1);color:var(--ok);border-color:rgba(74,222,128,.35);}
+.sl3{background:rgba(232,255,71,.1);color:var(--acc);border-color:rgba(232,255,71,.35);}
+.chv{color:var(--tx3);font-size:11px;transition:transform .2s;display:inline-block;}
+.tc.x .chv{transform:rotate(180deg);}
+.tcb{display:none;margin-top:12px;}
+.tc.x .tcb{display:block;}
+.yt-thumb{position:relative;border-radius:var(--rs);overflow:hidden;margin-bottom:12px;cursor:pointer;display:block;text-decoration:none;}
+.yt-thumb img{width:100%;display:block;object-fit:cover;height:180px;}
+.yt-overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;}
+.yt-play{width:54px;height:54px;border-radius:50%;background:rgba(255,0,0,.9);display:flex;align-items:center;justify-content:center;}
+.yt-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.78));padding:8px 10px;font-size:11px;color:#fff;font-weight:500;}
+.tcdtl{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:9px;}
+.tckl{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
+.tcki{font-size:12px;color:var(--tx2);padding:3px 0 3px 13px;position:relative;line-height:1.4;}
+.tcki::before{content:'—';position:absolute;left:0;color:var(--tx3);font-size:10px;top:4px;}
+.tcdrill{margin-top:10px;padding:10px 12px;background:rgba(232,255,71,.04);border:.5px solid rgba(232,255,71,.15);border-radius:var(--rs);}
+.tcdrillL{font-size:10px;color:var(--acc);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;}
+.tcdrillT{font-size:12px;color:var(--tx2);line-height:1.5;}
+.tcstrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.tcsb{font-size:11px;padding:5px 11px;border-radius:20px;border:1px solid var(--b2);background:var(--s2);color:var(--tx2);cursor:pointer;transition:all .15s;}
+.tcsb:active{transform:scale(.97);}
+.drow{display:flex;gap:8px;margin-bottom:10px;}
+.dopt{flex:1;padding:11px 4px;border-radius:var(--rs);border:1px solid var(--b2);background:var(--s2);color:var(--tx2);font-size:12px;cursor:pointer;text-align:center;transition:all .15s;}
+.dopt.ds{border-color:rgba(232,255,71,.45);background:rgba(232,255,71,.08);color:var(--acc);}
+.gbtn{width:100%;padding:14px;border-radius:var(--r);border:none;background:var(--acc);color:#0a0a0b;font-size:14px;font-weight:600;cursor:pointer;margin-top:4px;}
+.gbtn:active{transform:scale(.98);}
+.dsession{background:var(--s1);border:.5px solid rgba(232,255,71,.2);border-radius:var(--r);padding:13px 15px;margin-top:10px;}
+.dstep{display:flex;gap:10px;padding:7px 0;border-bottom:.5px solid var(--b1);}
+.dstep:last-child{border-bottom:none;}
+.dsn{font-size:10px;color:var(--tx3);min-width:17px;padding-top:2px;}
+.dstitle{font-size:13px;color:var(--tx);font-weight:500;}
+.dsdtl{font-size:11px;color:var(--tx2);margin-top:2px;line-height:1.4;}
+.dstime{font-size:10px;color:var(--tx3);margin-top:3px;}
+.li{width:100%;padding:11px 12px;background:var(--s2);border:.5px solid var(--b1);border-radius:var(--rs);color:var(--tx);font-size:13px;resize:none;font-family:inherit;line-height:1.5;-webkit-appearance:none;}
+.li:focus{outline:none;border-color:rgba(232,255,71,.3);}
+.lbtn{width:100%;padding:13px;border-radius:var(--rs);border:1px solid rgba(232,255,71,.35);background:rgba(232,255,71,.08);color:var(--acc);font-size:13px;font-weight:500;cursor:pointer;margin-top:8px;}
+.lbtn:active{transform:scale(.98);}
+.nbanner{background:rgba(232,255,71,.06);border:1px solid rgba(232,255,71,.18);border-radius:var(--r);padding:14px 15px;margin-bottom:12px;}
+.nbanner-title{font-size:13px;font-weight:500;color:var(--acc);margin-bottom:4px;}
+.nbanner-sub{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px;}
+.nenablebtn{width:100%;padding:12px;border-radius:var(--rs);border:none;background:var(--acc);color:#0a0a0b;font-size:13px;font-weight:600;cursor:pointer;}
+.nenablebtn:active{transform:scale(.98);}
+.nstatus{font-size:11px;color:var(--tx2);text-align:center;margin-top:7px;}
+.nitem{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--s2);border-radius:var(--rs);margin-bottom:5px;}
+.ntime{font-size:11px;color:var(--acc);min-width:42px;font-weight:500;}
+.ntext{font-size:12px;color:var(--tx2);line-height:1.4;}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.scard{background:var(--s1);border:.5px solid var(--b1);border-radius:var(--rs);padding:12px;}
+.snum{font-size:26px;font-weight:600;line-height:1;}
+.slabel{font-size:11px;color:var(--tx2);margin-top:4px;}
+.bb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#0c0c0e;border-top:1px solid rgba(255,255,255,.1);padding:10px 6px;padding-bottom:max(env(safe-area-inset-bottom),16px);display:flex;justify-content:space-around;z-index:100;}
+.bbb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 8px;border-radius:var(--rs);border:none;background:transparent;cursor:pointer;min-width:52px;}
+.bbb svg{stroke:#4a4a4a;transition:stroke .15s;}
+.bbb span{font-size:10px;color:#4a4a4a;font-weight:500;transition:color .15s;}
+.bbb.on svg{stroke:#e8ff47;}
+.bbb.on span{color:#e8ff47;}
+.qcard{background:var(--s1);border:.5px solid var(--b1);border-radius:var(--r);padding:15px;position:relative;overflow:hidden;}
+.qmark{font-size:52px;color:rgba(232,255,71,.06);position:absolute;top:0;left:8px;font-family:Georgia,serif;line-height:1;}
+.qtxt{font-size:13px;color:var(--tx);line-height:1.65;font-style:italic;position:relative;}
+.qauth{font-size:10px;color:var(--tx3);margin-top:7px;text-transform:uppercase;letter-spacing:.07em;}
+.pill-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px;}
+.pill{font-size:10px;padding:3px 8px;border-radius:20px;}
+.py{border:1px solid rgba(232,255,71,.3);color:var(--acc);background:rgba(232,255,71,.07);}
+.pb{border:1px solid rgba(79,172,254,.3);color:var(--acc3);background:rgba(79,172,254,.07);}
+.po{border:1px solid rgba(255,107,53,.3);color:var(--acc2);background:rgba(255,107,53,.07);}
+.wkgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.wkd{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.wkdl{font-size:8px;color:var(--tx3);text-transform:uppercase;}
+.wkdd{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;border:1px solid var(--b1);color:var(--tx3);background:var(--s2);}
+.wkdd.bj{background:rgba(232,255,71,.1);color:var(--acc);border-color:rgba(232,255,71,.35);}
+.wkdd.st{background:rgba(79,172,254,.1);color:var(--acc3);border-color:rgba(79,172,254,.35);}
+.wkdd.td{box-shadow:0 0 0 2px var(--acc);}
+.install-steps{counter-reset:step;}
+.install-step{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:.5px solid var(--b1);}
+.install-step:last-child{border-bottom:none;}
+.step-num{width:24px;height:24px;border-radius:50%;background:rgba(232,255,71,.12);border:1px solid rgba(232,255,71,.3);color:var(--acc);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-txt{font-size:12px;color:var(--tx2);line-height:1.5;}
+.step-bold{color:var(--tx);font-weight:500;}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="hdr">
+    <div class="hdr-l">
+      <span class="hdr-greet" id="greet">good morning</span>
+      <span class="hdr-title">Your BJJ OS</span>
+    </div>
+    <span class="badge b-bjj" id="dbadge">BJJ Day</span>
+  </div>
+  <div class="nav">
+    <button class="nb on" onclick="go('today')">Today</button>
+    <button class="nb" onclick="go('week')">Week</button>
+    <button class="nb" onclick="go('tech')">Techniques</button>
+    <button class="nb" onclick="go('drill')">Drill Gen</button>
+    <button class="nb" onclick="go('log')">Class Log</button>
+    <button class="nb" onclick="go('notif')">Notifications</button>
+    <button class="nb" onclick="go('stats')">Stats</button>
+  </div>
+  <div class="ct" id="ct"></div>
+  <div class="bb">
+    <button class="bbb on" id="bb-today" onclick="go('today')">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><rect x="3" y="3" width="16" height="16" rx="3"/><path d="M3 9h16"/><circle cx="8" cy="14" r="1.2" fill="currentColor" stroke="none"/><circle cx="11" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg>
+      <span>Today</span>
+    </button>
+    <button class="bbb" id="bb-tech" onclick="go('tech')">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><path d="M11 7v4l2.5 2.5" stroke-linecap="round"/></svg>
+      <span>Learn</span>
+    </button>
+    <button class="bbb" id="bb-drill" onclick="go('drill')">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><path d="M5 11h12M13 7l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Drill</span>
+    </button>
+    <button class="bbb" id="bb-log" onclick="go('log')">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><rect x="4" y="3" width="14" height="16" rx="2"/><path d="M8 8h6M8 12h4" stroke-linecap="round"/></svg>
+      <span>Log</span>
+    </button>
+    <button class="bbb" id="bb-notif" onclick="go('notif')">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><path d="M11 3a6 6 0 016 6v3l1.5 2.5h-15L5 12V9a6 6 0 016-6z"/><path d="M9 17a2 2 0 004 0" stroke-linecap="round"/></svg>
+      <span>Alerts</span>
+    </button>
+  </div>
+</div>
+
+<script>
+const SK='bjjos_v1';
+let S={water:0,smInt:0,smAuto:0,smLog:[],techSt:{},logs:[],classes:0,start:new Date().toISOString().split('T')[0],lastDay:'',notifEnabled:false};
+
+function loadS(){
+  try{
+    const d=localStorage.getItem(SK);
+    if(d){
+      const p=JSON.parse(d);
+      const t=new Date().toISOString().split('T')[0];
+      if(p.lastDay!==t){p.water=0;p.smInt=0;p.smAuto=0;p.smLog=[];p.lastDay=t;}
+      S={...S,...p};
+    }else{S.lastDay=new Date().toISOString().split('T')[0];saveS();}
+  }catch(e){}
+}
+function saveS(){try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}}
+
+function dayType(){
+  const d=new Date().getDay();
+  if(d===6||d===1)return'bjj';
+  if(d===3)return'drill';
+  if(d===0||d===2||d===4)return'str';
+  return'rest';
+}
+
+const TECHS=[
+  {id:'back',title:'Back control — seatbelt',phase:'Month 1–2 · Core system',vid:'baSqWCtLysU',vtitle:'BJJ Fundamentals: Back Mount Seatbelt Control',
+   detail:'The back is the highest-value position in BJJ. Seatbelt grip (one arm over shoulder, one under armpit), both heels hooked inside their thighs, hips pressed tight behind theirs. Whoever takes the back controls the fight.',
+   keys:['Seatbelt: top arm over shoulder, bottom under armpit — hands clasped','Both heels hooked inside thighs, pointing inward','Hips glued to their lower back — zero space','When they escape, follow their shoulders not their hips'],
+   drill:'Partner turtles. You get seatbelt + both hooks. Hold 30s while they resist. 15 reps each. Focus: keep top arm connected.'},
+  {id:'rnc',title:'Rear naked choke (RNC)',phase:'Month 1–2 · Primary finish',vid:'l8-JI7NND3E',vtitle:'How To Perform The Perfect RNC — John Danaher',
+   detail:'Primary submission from the back. Forearm blade under the chin — never the wrist or throat. Choking arm hand grips your own bicep. Free hand behind their head as back-pressure. Squeeze elbows AND extend chest backward simultaneously.',
+   keys:['Blade of forearm under chin — not the wrist','Threaten with other arm to make them lift their chin','Bicep grip: your hand cups the back of their head','Finish: elbows together + chest extends back at the same time'],
+   drill:'In back control, drill getting arm under chin without squeezing. Position only, 20x. Build the motor pattern before the squeeze.'},
+  {id:'turtle',title:'Back take from turtle',phase:'Month 1–2 · Primary entry',vid:'3TgVQ-rmS8w',vtitle:'BJJ Back Take from Turtle — Competition Tested',
+   detail:'When someone turtles (all fours), this is your main entry. Approach from the side, establish seatbelt chest-to-back, insert bottom hook first, tilt them to get the top hook. This is the most common back take entry you will hit in sparring.',
+   keys:['Approach from the side — not directly from behind','Chest-to-back contact before hooks','Insert bottom hook first (inside knee), tilt for top hook','Pull far shoulder back to expose the back for the tilt'],
+   drill:'Partner turtles. Practice seatbelt entry from the side + tilt. No hooks yet — just the entry motion. 15 reps each side.'},
+  {id:'guard',title:'Guard recovery — shrimping',phase:'Month 1–2 · Survival',vid:'SdAhRzGrO1k',vtitle:'How To Shrimp in BJJ — Hip Escape Fundamentals',
+   detail:'When someone passes your guard, recovering it is more important than any attack. Frame on their hip with your forearm, shrimp your hips away, re-establish guard. The shrimp is the most fundamental defensive movement in BJJ.',
+   keys:['Forearm frame on hip — not palm, forearm is structural','Shrimp hips away from them — create distance','Outside knee comes in as shield while you re-guard','From side control: elbow-knee frame is your first move'],
+   drill:'Solo: shrimp across the mat and back 5 times every session. This is the #1 solo BJJ drill. No mat needed — any floor space.'},
+  {id:'xguard',title:'X-guard sweep',phase:'Now · Already learning in class',vid:'f7A1vv0-A2U',vtitle:'Basic X Guard Sweep — Bernardo Faria',
+   detail:'You are being shown this now. X-guard: you are underneath with both legs creating an X around their base. Sweep direction: the side where you extend your bottom leg. Come up on top immediately after the sweep.',
+   keys:['Feet control their ankle AND back of knee — not just hanging','Sweep only to the side where you extend bottom leg','Entry: sit under them as they stand or posture up','After sweep: stand up on top immediately — do not stay on back'],
+   drill:'Drill the leg position on a seated partner — get into X-guard shape and feel both control points. 10 reps each.'},
+  {id:'bow',title:'Bow and arrow choke',phase:'Month 2–3 · Gi finish',vid:'xqNhZVNhxnE',vtitle:'How To Bow and Arrow Choke From Back Control',
+   detail:'Most powerful choke in gi BJJ. From back control: thumb-in collar grip as deep as possible (knuckles near jaw). Bottom hand grips gi at the knee. Extend your body like a bow — they have no defense when both grips are locked.',
+   keys:['Thumb-in collar grip — knuckles toward jaw, as deep as possible','Bottom hand grips gi at the knee, not the ankle','Extend: straighten bottom leg while pulling collar and knee apart','You lose bottom hook — replace it with the knee grip'],
+   drill:'Drill collar grip only in back control. Thumb-in, deepening each rep, 20 times. No finish yet — just the grip.'},
+];
+
+const QUOTES=[
+  {t:"Position before submission. Always. If you skip position, the submission will be taken from you.",a:"Gracie principle"},
+  {t:"The problem is not the problem. The problem is your attitude about the problem.",a:"John Danaher"},
+  {t:"The most important thing is to get to the mat. Everything else is details.",a:"Marcelo Garcia"},
+  {t:"You picked this sport at 36 with a full life. That is exactly the kind of person this sport was made for.",a:"Your situation, honestly"},
+  {t:"Specialize your weapon. Everything else becomes your armor.",a:"The Dota principle — applied to BJJ"},
+  {t:"Tap early, tap often. Your training partner is your most valuable asset.",a:"Mat wisdom"},
+  {t:"The goal is not to be better than the other person. It is to be better than your previous self.",a:"Universal truth"},
+];
+
+const NOTIFS=[
+  {time:'6:30',txt:'Wake up. 500ml water before anything else.',dot:'d-w'},
+  {time:'7:00',txt:'Eating moment 1 — eggs or labneh + bread. 5 min.',dot:'d-e'},
+  {time:'9:00',txt:'Desk water bottle. Finish 500ml before 11am.',dot:'d-w'},
+  {time:'13:00',txt:'Eating moment 2 — order or eat at home.',dot:'d-e'},
+  {time:'15:00',txt:'Afternoon water push. 500ml now.',dot:'d-w'},
+  {time:'17:30',txt:'BJJ days: gear ready. Non-BJJ: walk with Liam.',dot:'d-t'},
+  {time:'20:00',txt:'Last water push. Cut the mate after this.',dot:'d-w'},
+  {time:'22:00',txt:'Post-class meal window. Protein within 90min.',dot:'d-e'},
+];
+
+function stCls(id){const s=S.techSt[id]||'Learning';return{Learning:'sl0',Drilling:'sl1','Feeling it':'sl2','Got it':'sl3'}[s]||'sl0';}
+function stLbl(id){return S.techSt[id]||'Learning';}
+
+let curTab='today';
+let dtime='20',dpart='yes';
+
+function go(tab){
+  curTab=tab;
+  document.querySelectorAll('.nb').forEach((b,i)=>{b.classList.toggle('on',['today','week','tech','drill','log','notif','stats'][i]===tab);});
+  ['today','tech','drill','log','notif'].forEach(t=>{const bb=document.getElementById('bb-'+t);if(bb)bb.classList.toggle('on',t===tab);});
+  const c=document.getElementById('ct');
+  c.scrollTop=0;
+  if(tab==='today')c.innerHTML=rToday();
+  else if(tab==='week')c.innerHTML=rWeek();
+  else if(tab==='tech')c.innerHTML=rTech();
+  else if(tab==='drill')c.innerHTML=rDrill();
+  else if(tab==='log')c.innerHTML=rLog();
+  else if(tab==='notif')c.innerHTML=rNotif();
+  else if(tab==='stats')c.innerHTML=rStats();
+  if(tab==='today'){setTimeout(()=>{rfWater();rfSmoke();},10);}
+}
+
+function rToday(){
+  const type=dayType();
+  const isBJJ=type==='bjj'||type==='drill';
+  const tl=[
+    {t:'6:30',dot:'d-w',n:'Wake + 500ml water',s:'Before anything else. You wake up dehydrated every morning.'},
+    {t:'7:00',dot:'d-e',n:'Eating moment 1',s:'Eggs or labneh + bread. 5 min. Non-negotiable.'},
+    {t:'7:20',dot:isBJJ?'d-r':'d-t',n:isBJJ?'Mobility only — 10 min':'Strength session — 25 min',s:isBJJ?'Hips, thoracic, neck rolls. No strength before class.':'Check Drill tab for today\'s program.'},
+    {t:'9:00',dot:'d-w',n:'Desk bottle — 500ml',s:'Finish before 11am. Alongside or instead of mate.'},
+    {t:'13:00',dot:'d-e',n:'Eating moment 2',s:'Shawarma, grilled chicken, hummus, falafel — all good here.'},
+    {t:'15:00',dot:'d-w',n:'500ml water',s:isBJJ?'Pre-class hydration window. Important.':'Afternoon push.'},
+  ];
+  if(isBJJ){
+    tl.push({t:'18:00',dot:'d-t',n:"Liam's BJJ class",s:'Watch closely. You learn a lot by watching.'});
+    tl.push({t:'19:30',dot:'d-t',n:type==='drill'?'Wednesday sparring':'Your BJJ class',s:type==='drill'?'One mental note per round. Tap early — always.':'Pick ONE thing to try. Not winning — one thing.'});
+  }else{
+    tl.push({t:'17:00',dot:'d-t',n:'Walk with Liam (~1hr)',s:'Active recovery. Let your brain process BJJ passively.'});
+  }
+  tl.push(
+    {t:'20:00',dot:'d-w',n:'Last water push — 500ml',s:'Cut mate after this. Sleep improves within days.'},
+    {t:'22:00',dot:'d-e',n:'Main meal',s:isBJJ?'Post-class protein window. Grilled anything within 90min.':'Keep it light tonight.'}
+  );
+  const q=QUOTES[new Date().getDay()%QUOTES.length];
+  return`<div class="sec"><div class="sl">Daily flow</div>
+    <div class="card"><div class="tl">${tl.map(i=>`<div class="tli"><span class="tlt">${i.t}</span><div class="tld ${i.dot}"></div><div><div class="tln">${i.n}</div><div class="tlsub">${i.s}</div></div></div>`).join('')}</div></div></div>
+  <div class="sec"><div class="sl">Hydration</div><div class="card" id="water-wrap"></div></div>
+  <div class="sec"><div class="sl">Smoking awareness</div><div class="card" id="smoke-wrap"></div></div>
+  <div class="sec"><div class="sl">Today's mindset</div>
+    <div class="qcard"><div class="qmark">"</div><div class="qtxt">${q.t}</div><div class="qauth">${q.a}</div></div></div>`;
+}
+
+function rfWater(){
+  const wrap=document.getElementById('water-wrap');if(!wrap)return;
+  const isBJJ=dayType()==='bjj'||dayType()==='drill';const max=isBJJ?7:6;
+  let cups='';
+  for(let i=0;i<max;i++){const f=i<S.water;cups+=`<div class="wc ${f?'f':''}" onclick="setW(${i+1})"><div class="wf" style="height:${f?100:0}%"></div></div>`;}
+  wrap.innerHTML=`<div class="wr">${cups}</div>
+    <div style="margin-top:7px;font-size:11px;color:var(--tx2)">${S.water*250}ml of ${max*250}ml target</div>
+    <div class="wbtns">
+      <button class="wbtn wr2" onclick="adjW(-1)">− Remove last</button>
+      <button class="wbtn wa" onclick="adjW(1)">+ Add 250ml</button>
+    </div>`;
+}
+function setW(n){S.water=n;saveS();rfWater();}
+function adjW(d){const isBJJ=dayType()==='bjj'||dayType()==='drill';const max=isBJJ?7:6;S.water=Math.max(0,Math.min(max,S.water+d));saveS();rfWater();}
+
+function rfSmoke(){
+  const wrap=document.getElementById('smoke-wrap');if(!wrap)return;
+  const tot=S.smInt+S.smAuto;const pct=tot?Math.round(S.smInt/tot*100):0;
+  wrap.innerHTML=`<div style="font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:9px">Log each cigarette. Intentional = you chose it consciously. Automatic = habit, did not think about it. The ratio over weeks is the insight.</div>
+    <div class="smbtns">
+      <button class="smb si" onclick="logSm('i')">+ Intentional<br><span style="font-size:10px;font-weight:400;opacity:.8">I chose this one</span></button>
+      <button class="smb sa" onclick="logSm('a')">+ Automatic<br><span style="font-size:10px;font-weight:400;opacity:.8">Did not think about it</span></button>
+    </div>
+    <div class="smcts">
+      <div class="smc"><div class="smcn" style="color:var(--ok)">${S.smInt}</div><div class="smcl">intentional</div></div>
+      <div class="smc"><div class="smcn" style="color:var(--warn)">${S.smAuto}</div><div class="smcl">automatic</div></div>
+      <div class="smc"><div class="smcn" style="color:var(--tx)">${tot}</div><div class="smcl">total</div></div>
+    </div>
+    ${tot>0?`<button class="smundo" onclick="undoSm()">↩ Undo last entry</button>
+    <div style="margin-top:9px;font-size:11px;color:var(--tx2);padding:8px 11px;background:var(--s2);border-radius:var(--rs);line-height:1.5">${pct}% intentional today. ${pct>60?'Good — you are choosing most of them consciously.':'Most are automatic. These are habit triggers, not cravings. Easier to break.'}</div>`:''}`;
+}
+function logSm(t){if(t==='i')S.smInt++;else S.smAuto++;S.smLog.push({t,time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})});saveS();rfSmoke();}
+function undoSm(){if(!S.smLog.length)return;const l=S.smLog.pop();if(l.t==='i'&&S.smInt>0)S.smInt--;else if(l.t==='a'&&S.smAuto>0)S.smAuto--;saveS();rfSmoke();}
+
+function rWeek(){
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const types=['str','bjj','str','drill','str','rest','bjj'];
+  const cls={bjj:'bj',drill:'bj',str:'st',rest:''};
+  const lbl={bjj:'B',drill:'D',str:'S',rest:'·'};
+  const today=new Date().getDay();
+  const sched=[
+    {day:'Saturday',items:[{t:'18:00',l:"Liam's BJJ class"},{t:'19:30',l:'Your BJJ class'}]},
+    {day:'Sunday',items:[{t:'7:20',l:'Strength A — hip & pull'},{t:'17:00',l:'Walk with Liam'}]},
+    {day:'Monday',items:[{t:'18:00',l:"Liam's BJJ class"},{t:'19:30',l:'Your BJJ class'}]},
+    {day:'Tuesday',items:[{t:'7:20',l:'Strength B — push & core'},{t:'17:00',l:'Home drilling (brother)'}]},
+    {day:'Wednesday',items:[{t:'18:00',l:"Liam's BJJ class"},{t:'19:30',l:'Sparring / drilling class'}]},
+    {day:'Thursday',items:[{t:'7:20',l:'Strength C — mobility'},{t:'17:00',l:'Home drilling (brother)'}]},
+    {day:'Friday',items:[{t:'—',l:'Full rest day — protect it'}]},
+  ];
+  return`<div class="sec"><div class="sl">Week overview</div>
+    <div class="card"><div class="wkgrid">${days.map((d,i)=>`<div class="wkd"><span class="wkdl">${d}</span><div class="wkdd ${cls[types[i]]||''} ${i===today?'td':''}">${lbl[types[i]]}</div></div>`).join('')}</div>
+    <div class="pill-row"><span class="pill py">B = BJJ</span><span class="pill pb">S = Strength</span><span class="pill po">D = Drill</span></div></div></div>
+  <div class="sec"><div class="sl">Full schedule</div>
+    ${sched.map(s=>`<div class="card" style="margin-bottom:8px"><div class="ct-title" style="margin-bottom:8px">${s.day}</div>
+    ${s.items.map(i=>`<div class="tli"><span class="tlt">${i.t}</span><div class="tld d-t"></div><div class="tln" style="font-size:12px">${i.l}</div></div>`).join('')}</div>`).join('')}</div>`;
+}
+
+function rTech(){
+  return`<div class="sec"><div class="sl">Your technique library</div>
+    <div style="font-size:11px;color:var(--tx2);margin-bottom:12px;line-height:1.6">Zero starting point. Back take system — techniques build in sequence. Tap to expand. Videos show real people demonstrating the exact position.</div>
+    ${TECHS.map(t=>`<div class="tc" id="tc-${t.id}" onclick="togTech('${t.id}')">
+      <div class="tch">
+        <div style="flex:1"><div class="tctitle">${t.title}</div><div class="tcph">${t.phase}</div></div>
+        <div class="tcr"><span class="tcs ${stCls(t.id)}">${stLbl(t.id)}</span><span class="chv">▾</span></div>
+      </div>
+      <div class="tcb">
+        <a class="yt-thumb" href="https://www.youtube.com/watch?v=${t.vid}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+          <img src="https://img.youtube.com/vi/${t.vid}/hqdefault.jpg" alt="${t.title} BJJ tutorial" loading="lazy"/>
+          <div class="yt-overlay"><div class="yt-play"><svg width="20" height="20" viewBox="0 0 20 20" fill="white"><path d="M7 4l10 6-10 6V4z"/></svg></div></div>
+          <div class="yt-label">${t.vtitle}</div>
+        </a>
+        <div class="tcdtl">${t.detail}</div>
+        <div class="tckl">Key details</div>
+        ${t.keys.map(k=>`<div class="tcki">${k}</div>`).join('')}
+        <div class="tcdrill"><div class="tcdrillL">Home drill</div><div class="tcdrillT">${t.drill}</div></div>
+        <div class="tcstrow">
+          ${['Learning','Drilling','Feeling it','Got it'].map(s=>`<button class="tcsb" onclick="setSt(event,'${t.id}','${s}')">${s}</button>`).join('')}
+        </div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+function togTech(id){const c=document.getElementById('tc-'+id);if(c)c.classList.toggle('x');}
+function setSt(e,id,s){e.stopPropagation();S.techSt[id]=s;saveS();go('tech');}
+
+function rDrill(){
+  return`<div class="sec"><div class="sl">Generate drilling session</div>
+    <div class="card">
+      <div class="ct-sub" style="margin-bottom:8px">How long do you have?</div>
+      <div class="drow">${['10','20','30'].map(t=>`<div class="dopt ${dtime===t?'ds':''}" onclick="setDO('t','${t}')">${t} min</div>`).join('')}</div>
+      <div class="ct-sub" style="margin-bottom:8px">Is your brother here?</div>
+      <div class="drow">
+        <div class="dopt ${dpart==='yes'?'ds':''}" onclick="setDO('p','yes')">Yes, he is here</div>
+        <div class="dopt ${dpart==='no'?'ds':''}" onclick="setDO('p','no')">Solo today</div>
+      </div>
+      <button class="gbtn" onclick="genDrill()">Generate session</button>
+    </div>
+    <div id="dout"></div></div>
+  <div class="sec"><div class="sl">Morning strength programs</div>
+    <div class="card"><div class="ct-title">Day A — Hip & Pull</div><div class="ct-sub" style="margin-top:5px">KB swings 3×15 · DB Romanian deadlift 3×10 · DB rows 3×10 per side · Dead hang 3×max time</div></div>
+    <div class="card"><div class="ct-title">Day B — Push & Core</div><div class="ct-sub" style="margin-top:5px">Push-ups 4×failure · DB overhead press 3×10 · Plank 3×40s · Hollow body hold 3×20s</div></div>
+    <div class="card"><div class="ct-title">Day C — Mobility (non-negotiable)</div><div class="ct-sub" style="margin-top:5px">Hip flexors 5min · Thoracic rotation 3×10 per side · Glute bridges 3×15 · Neck static hold · Shoulder circles</div></div>
+  </div>`;
+}
+function setDO(type,val){if(type==='t')dtime=val;else dpart=val;document.getElementById('ct').innerHTML=rDrill();}
+function genDrill(){
+  const t=parseInt(dtime),p=dpart==='yes';
+  let steps=p?[
+    {title:'Warm-up — shrimping',d:'Shrimp across mat and back 3 times. Get hips moving before anything else.',time:'3 min'},
+    {title:'Back control hold',d:'You take back with seatbelt + hooks. Partner resists. Keep seatbelt connected — follow their shoulders.',time:t<=10?'4 min':'6 min'},
+    {title:'Turtle to back take entry',d:'Partner turtles. You drill seatbelt from the side + tilt. 10 reps each. Slow and deliberate.',time:t<=10?'4 min':'7 min'},
+  ]:[
+    {title:'Hip escapes — shrimping',d:'Lie on back. Shrimp one end to other and back. 5 full lengths. Most important solo BJJ drill.',time:'4 min'},
+    {title:'Guard frame position',d:'On back. Practice elbow-knee frame: forearm on imaginary hip, knee as shield. Hold structure 10 times.',time:'3 min'},
+    {title:'Visualization — back take',d:'Eyes closed. Walk through turtle to seatbelt to hooks 10 times. Visualize each hand placement exactly.',time:'5 min'},
+  ];
+  if(t>=20&&p)steps.push({title:'RNC arm positioning',d:'In back control, drill arm under chin without squeezing. Position only, 15 reps each. Build motor pattern.',time:'6 min'});
+  if(t>=20&&p)steps.push({title:'Positional round',d:'Back control — you attacking. Live resistance. 2 rounds x 2 min. Maintain or finish.',time:'5 min'});
+  if(t>=20&&!p)steps.push({title:'Shoulder mobility',d:'Arm circles, thoracic rotation, shoulder stretches. Direct impact on back control quality.',time:'6 min'});
+  if(t>=20&&!p)steps.push({title:'Technique study',d:'Watch one technique video (see Techniques tab). Watch twice — first for the move, second for the WHY.',time:'7 min'});
+  if(t>=30)steps.push({title:'Guard recovery',d:p?'Partner tries to pass. You shrimp and replace guard only. Pure survival. No submissions.':'Slow-motion guard recovery: frame, shrimp, knee in. 10 reps each side.',time:'5 min'});
+  document.getElementById('dout').innerHTML=`<div class="dsession">
+    <div style="font-size:13px;font-weight:500;color:var(--acc);margin-bottom:11px">${t}-min ${p?'partner':'solo'} session — back take system</div>
+    ${steps.map((s,i)=>`<div class="dstep"><div class="dsn">${i+1}</div><div><div class="dstitle">${s.title}</div><div class="dsdtl">${s.d}</div><div class="dstime">${s.time}</div></div></div>`).join('')}
+  </div>`;}
+
+function rLog(){
+  const entries=S.logs.slice(-5).reverse();
+  return`<div class="sec"><div class="sl">Log today's class</div>
+    <div class="card">
+      <div style="font-size:11px;color:var(--tx2);margin-bottom:10px;line-height:1.5">Two questions. Do this within an hour of finishing class while it is still fresh.</div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:5px">One thing that worked</div>
+      <textarea class="li" id="lw" rows="2" placeholder="Even tiny wins count..."></textarea>
+      <div style="font-size:12px;color:var(--tx2);margin:10px 0 5px">One thing that caught you</div>
+      <textarea class="li" id="lc" rows="2" placeholder="Be specific — position, moment, why..."></textarea>
+      <button class="lbtn" onclick="saveLog()">Save class log</button>
+    </div></div>
+  ${entries.length?`<div class="sec"><div class="sl">Recent entries</div>
+    ${entries.map(e=>`<div class="card" style="margin-bottom:8px">
+      <div style="font-size:10px;color:var(--tx3);margin-bottom:5px">${e.date}</div>
+      ${e.w?`<div style="font-size:12px;color:var(--ok);margin-bottom:3px;line-height:1.4">+ ${e.w}</div>`:''}
+      ${e.c?`<div style="font-size:12px;color:var(--warn);line-height:1.4">↓ ${e.c}</div>`:''}
+    </div>`).join('')}</div>`:''}`;
+}
+function saveLog(){const w=document.getElementById('lw').value.trim(),c=document.getElementById('lc').value.trim();if(!w&&!c)return;S.logs.push({date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),w,c});S.classes++;saveS();go('log');}
+
+function rNotif(){
+  const granted=S.notifEnabled&&typeof Notification!=='undefined'&&Notification.permission==='granted';
+  const denied=typeof Notification!=='undefined'&&Notification.permission==='denied';
+  return`<div class="sec"><div class="sl">Push notifications</div>
+    <div class="nbanner">
+      <div class="nbanner-title">${granted?'Notifications active':'Enable daily reminders'}</div>
+      <div class="nbanner-sub">${granted?'Your BJJ OS will send reminders at the right times throughout the day. Turn off anytime in iPhone Settings > Notifications.':denied?'Notifications are blocked. Go to iPhone Settings > Safari > Notifications, allow this site, then return here.':'Get timed reminders for water, food, training, and mate cutoff. For full background notifications, add to home screen first (see below).'}</div>
+      ${!denied?`<button class="nenablebtn" onclick="reqNotif()">${granted?'Send test notification':'Enable notifications'}</button>`:''}
+      <div class="nstatus" id="nstatus">${granted?'Active — reminders scheduled for today':'Tap above to allow'}</div>
+    </div></div>
+  <div class="sec"><div class="sl">Today's reminder schedule</div>
+    <div class="card">${NOTIFS.map(n=>`<div class="nitem"><span class="ntime">${n.time}</span><span class="ntext">${n.txt}</span></div>`).join('')}</div></div>
+  <div class="sec"><div class="sl">Add to iPhone home screen</div>
+    <div class="card"><div class="install-steps">
+      ${[
+        ['Open this URL in','Safari (not Chrome)'],
+        ['Tap the','Share button — the box with an arrow pointing up'],
+        ['Scroll down and tap','Add to Home Screen'],
+        ['Tap','Add in the top right corner'],
+        ['Open the app','from your home screen — it now runs like a native app'],
+        ['Come back to Notifications tab','and enable reminders'],
+      ].map((s,i)=>`<div class="install-step"><div class="step-num">${i+1}</div><div class="step-txt">${s[0]} <span class="step-bold">${s[1]}</span></div></div>`).join('')}
+    </div></div></div>
+  <div class="sec"><div class="sl">Android — add to home screen</div>
+    <div class="card"><div class="install-steps">
+      ${[
+        ['Open this URL in','Chrome on Android'],
+        ['Tap the three dots menu','top right corner'],
+        ['Tap','Add to Home Screen'],
+        ['Tap','Add to confirm'],
+        ['Open from home screen','and enable notifications here'],
+      ].map((s,i)=>`<div class="install-step"><div class="step-num">${i+1}</div><div class="step-txt">${s[0]} <span class="step-bold">${s[1]}</span></div></div>`).join('')}
+    </div></div></div>`;
+}
+function reqNotif(){
+  if(typeof Notification==='undefined'){alert('Open this app in Safari and add it to your home screen first for notifications to work.');return;}
+  if(Notification.permission==='granted'){
+    new Notification('BJJ OS',{body:'Test notification working. Daily reminders are active.',icon:'/icon-192.png'});
+    S.notifEnabled=true;saveS();
+    document.getElementById('nstatus').textContent='Test sent. Notifications working.';
+    scheduleNotifs();return;
+  }
+  Notification.requestPermission().then(p=>{
+    if(p==='granted'){S.notifEnabled=true;saveS();new Notification('BJJ OS active',{body:'Daily reminders enabled. Stay on the mat.',icon:'/icon-192.png'});scheduleNotifs();go('notif');}
+    else{const el=document.getElementById('nstatus');if(el)el.textContent='Blocked. Check Safari Settings > Notifications.';}
+  });
+}
+function scheduleNotifs(){
+  if(typeof Notification==='undefined'||Notification.permission!=='granted')return;
+  const now=new Date();
+  NOTIFS.forEach(n=>{
+    const[h,m]=n.time.split(':').map(Number);
+    const target=new Date();target.setHours(h,m,0,0);
+    if(target>now){setTimeout(()=>{if(Notification.permission==='granted')new Notification('BJJ OS',{body:n.txt,tag:n.time,icon:'/icon-192.png'});},target-now);}
+  });
+}
+
+function rStats(){
+  const tot=S.smInt+S.smAuto;const pct=tot?Math.round(S.smInt/tot*100):0;
+  const done=Object.values(S.techSt).filter(s=>s==='Got it'||s==='Feeling it').length;
+  const weeks=Math.max(1,Math.round((new Date()-new Date(S.start))/(7*86400000)));
+  return`<div class="sec"><div class="sl">Your journey</div>
+    <div class="sgrid">
+      <div class="scard"><div class="snum" style="color:var(--acc)">${S.classes}</div><div class="slabel">classes logged</div></div>
+      <div class="scard"><div class="snum" style="color:var(--acc3)">${S.logs.length}</div><div class="slabel">sessions written</div></div>
+      <div class="scard"><div class="snum" style="color:var(--acc2)">${done}</div><div class="slabel">techniques feeling it+</div></div>
+      <div class="scard"><div class="snum" style="color:var(--tx)">${weeks}</div><div class="slabel">weeks in</div></div>
+    </div></div>
+  <div class="sec"><div class="sl">Technique progress</div>
+    <div class="card">${TECHS.map(t=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:.5px solid var(--b1)">
+      <div style="font-size:12px;color:var(--tx);flex:1;padding-right:8px">${t.title}</div>
+      <span class="tcs ${stCls(t.id)}">${stLbl(t.id)}</span></div>`).join('')}</div></div>
+  <div class="sec"><div class="sl">Smoking — today</div>
+    <div class="card">
+      <div class="sgrid" style="margin-bottom:8px">
+        <div class="scard"><div class="snum" style="color:var(--ok)">${S.smInt}</div><div class="slabel">intentional</div></div>
+        <div class="scard"><div class="snum" style="color:var(--warn)">${S.smAuto}</div><div class="slabel">automatic</div></div>
+      </div>
+      ${tot?`<div style="font-size:11px;color:var(--tx2);line-height:1.5">${pct}% intentional today. ${pct>60?'Good awareness — most are conscious choices.':'Mostly automatic — habit triggers, not cravings. Easier to replace.'}</div>`:'<div style="font-size:11px;color:var(--tx3)">Log from the Today tab.</div>'}
+    </div></div>`;
+}
+
+function init(){
+  loadS();
+  const h=new Date().getHours();
+  document.getElementById('greet').textContent=h<12?'good morning':h<17?'good afternoon':'good evening';
+  const type=dayType();
+  const badge=document.getElementById('dbadge');
+  badge.textContent={bjj:'BJJ Day',drill:'Drilling Day',str:'Strength Day',rest:'Rest Day'}[type];
+  badge.className='badge '+{bjj:'b-bjj',drill:'b-drl',str:'b-str',rest:'b-rst'}[type];
+  if(S.notifEnabled&&typeof Notification!=='undefined'&&Notification.permission==='granted')scheduleNotifs();
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  go('today');
+}
+init();
+</script>
+</body>
+</html>
