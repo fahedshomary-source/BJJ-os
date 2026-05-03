@@ -7,17 +7,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="BJJ OS"/>
 <meta name="theme-color" content="#0a0a0b"/>
-<meta name="description" content="Your personal BJJ lifestyle OS — schedule, techniques, hydration, drilling, and habit tracking."/>
 <title>BJJ OS</title>
 <link rel="manifest" href="/BJJ-os/manifest.json"/>
-
 <style>
 :root{--bg:#0a0a0b;--s1:#141416;--s2:#1c1c1f;--s3:#242428;--b1:rgba(255,255,255,0.08);--b2:rgba(255,255,255,0.16);--acc:#e8ff47;--acc2:#ff6b35;--acc3:#4facfe;--tx:#f0f0f0;--tx2:#9a9a9a;--tx3:#4a4a4a;--ok:#4ade80;--err:#f87171;--warn:#fbbf24;--r:14px;--rs:8px;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--bg);}
 body{color:var(--tx);font-family:-apple-system,'SF Pro Display',sans-serif;overflow:hidden;}
 .app{max-width:430px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column;background:var(--bg);}
-.hdr{padding:env(safe-area-inset-top,14px) 18px 12px;padding-top:max(env(safe-area-inset-top),14px);display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--b1);flex-shrink:0;}
+.hdr{padding:max(env(safe-area-inset-top),14px) 18px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--b1);flex-shrink:0;}
 .hdr-l{display:flex;flex-direction:column;}
 .hdr-greet{font-size:10px;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase;}
 .hdr-title{font-size:19px;font-weight:600;color:var(--tx);margin-top:1px;}
@@ -37,26 +35,38 @@ body{color:var(--tx);font-family:-apple-system,'SF Pro Display',sans-serif;overf
 .card{background:var(--s1);border:0.5px solid var(--b1);border-radius:var(--r);padding:13px 15px;margin-bottom:9px;}
 .ct-title{font-size:13px;font-weight:500;color:var(--tx);}
 .ct-sub{font-size:11px;color:var(--tx2);margin-top:3px;line-height:1.5;}
-.tl{display:flex;flex-direction:column;}
-.tli{display:flex;gap:11px;align-items:flex-start;padding:8px 0;border-bottom:.5px solid var(--b1);}
+
+/* TIMELINE WITH CHECKBOXES */
+.tli{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:.5px solid var(--b1);}
 .tli:last-child{border-bottom:none;}
-.tlt{font-size:10px;color:var(--tx3);min-width:38px;padding-top:2px;font-variant-numeric:tabular-nums;}
+.tlt{font-size:10px;color:var(--tx3);min-width:38px;padding-top:3px;font-variant-numeric:tabular-nums;}
 .tld{width:6px;height:6px;border-radius:50%;margin-top:5px;flex-shrink:0;}
 .d-w{background:var(--acc3);}.d-e{background:var(--ok);}.d-t{background:var(--acc);}.d-r{background:var(--tx3);}
 .tln{font-size:12px;font-weight:500;color:var(--tx);}
 .tlsub{font-size:11px;color:var(--tx2);margin-top:1px;line-height:1.4;}
+.tl-check{flex:1;}
+.chkbox{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--b2);background:var(--s2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;margin-top:1px;}
+.chkbox.done{background:var(--acc);border-color:var(--acc);}
+.chkbox.done svg{opacity:1;}
+.chkbox svg{opacity:0;transition:opacity .15s;}
+.tli.completed .tln{color:var(--tx3);text-decoration:line-through;}
+.tli.completed .tlsub{color:var(--tx3);}
+
+/* WATER */
 .wr{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
 .wc{width:34px;height:42px;border-radius:3px 3px 9px 9px;border:1.5px solid rgba(79,172,254,.2);cursor:pointer;overflow:hidden;display:flex;align-items:flex-end;background:var(--s2);transition:border-color .2s;}
 .wc.f{border-color:var(--acc3);}
 .wf{width:100%;transition:height .3s;}
 .wc.f .wf{background:var(--acc3);height:100%!important;}
 .wbtns{display:flex;gap:8px;margin-top:9px;}
-.wbtn{flex:1;padding:10px 6px;border-radius:var(--rs);border:1px solid var(--b2);background:var(--s2);color:var(--tx);font-size:13px;cursor:pointer;transition:all .15s;text-align:center;}
+.wbtn{flex:1;padding:10px 6px;border-radius:var(--rs);border:1px solid var(--b2);background:var(--s2);color:var(--tx);font-size:13px;cursor:pointer;text-align:center;}
 .wbtn:active{transform:scale(.97);}
 .wbtn.wa{border-color:rgba(79,172,254,.4);background:rgba(79,172,254,.09);color:var(--acc3);}
 .wbtn.wr2{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.07);color:var(--err);}
+
+/* SMOKE */
 .smbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px;}
-.smb{padding:14px 8px;border-radius:var(--rs);border:1.5px solid var(--b2);background:var(--s2);color:var(--tx);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-align:center;line-height:1.4;}
+.smb{padding:14px 8px;border-radius:var(--rs);border:1.5px solid var(--b2);background:var(--s2);color:var(--tx);font-size:13px;font-weight:500;cursor:pointer;text-align:center;line-height:1.4;}
 .smb:active{transform:scale(.97);}
 .smb.si{border-color:rgba(74,222,128,.5);background:rgba(74,222,128,.1);color:var(--ok);}
 .smb.sa{border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.1);color:var(--warn);}
@@ -66,6 +76,15 @@ body{color:var(--tx);font-family:-apple-system,'SF Pro Display',sans-serif;overf
 .smcl{font-size:10px;color:var(--tx2);margin-top:2px;}
 .smundo{width:100%;margin-top:8px;padding:10px;border-radius:var(--rs);border:1px solid var(--b2);background:var(--s2);color:var(--tx2);font-size:12px;cursor:pointer;}
 .smundo:active{transform:scale(.98);}
+.sm-alert{margin-top:9px;padding:9px 12px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:var(--rs);font-size:12px;color:var(--err);line-height:1.5;}
+.sm-baseline-info{margin-top:9px;padding:8px 11px;background:var(--s2);border-radius:var(--rs);font-size:11px;color:var(--tx2);line-height:1.5;}
+
+/* ADAPTIVE INSIGHT */
+.insight-card{background:rgba(232,255,71,.05);border:1px solid rgba(232,255,71,.18);border-radius:var(--r);padding:13px 15px;margin-bottom:10px;}
+.insight-tag{font-size:10px;color:var(--acc);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.insight-text{font-size:12px;color:var(--tx2);line-height:1.6;}
+
+/* TECHNIQUES */
 .tc{background:var(--s1);border:.5px solid var(--b1);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;}
 .tc.x{border-color:rgba(232,255,71,.25);}
 .tch{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
@@ -82,10 +101,10 @@ body{color:var(--tx);font-family:-apple-system,'SF Pro Display',sans-serif;overf
 .tcb{display:none;margin-top:12px;}
 .tc.x .tcb{display:block;}
 .yt-thumb{position:relative;border-radius:var(--rs);overflow:hidden;margin-bottom:12px;cursor:pointer;display:block;text-decoration:none;}
-.yt-thumb img{width:100%;display:block;object-fit:cover;height:180px;}
+.yt-thumb img{width:100%;display:block;object-fit:cover;height:170px;}
 .yt-overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;}
-.yt-play{width:54px;height:54px;border-radius:50%;background:rgba(255,0,0,.9);display:flex;align-items:center;justify-content:center;}
-.yt-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.78));padding:8px 10px;font-size:11px;color:#fff;font-weight:500;}
+.yt-play{width:52px;height:52px;border-radius:50%;background:rgba(255,0,0,.9);display:flex;align-items:center;justify-content:center;}
+.yt-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.75));padding:8px 10px;font-size:11px;color:#fff;font-weight:500;}
 .tcdtl{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:9px;}
 .tckl{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
 .tcki{font-size:12px;color:var(--tx2);padding:3px 0 3px 13px;position:relative;line-height:1.4;}
@@ -94,8 +113,11 @@ body{color:var(--tx);font-family:-apple-system,'SF Pro Display',sans-serif;overf
 .tcdrillL{font-size:10px;color:var(--acc);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;}
 .tcdrillT{font-size:12px;color:var(--tx2);line-height:1.5;}
 .tcstrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
-.tcsb{font-size:11px;padding:5px 11px;border-radius:20px;border:1px solid var(--b2);background:var(--s2);color:var(--tx2);cursor:pointer;transition:all .15s;}
+.tcsb{font-size:11px;padding:5px 11px;border-radius:20px;border:1px solid var(--b2);background:var(--s2);color:var(--tx2);cursor:pointer;}
 .tcsb:active{transform:scale(.97);}
+.tc-priority{font-size:10px;color:var(--err);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+
+/* DRILL GEN */
 .drow{display:flex;gap:8px;margin-bottom:10px;}
 .dopt{flex:1;padding:11px 4px;border-radius:var(--rs);border:1px solid var(--b2);background:var(--s2);color:var(--tx2);font-size:12px;cursor:pointer;text-align:center;transition:all .15s;}
 .dopt.ds{border-color:rgba(232,255,71,.45);background:rgba(232,255,71,.08);color:var(--acc);}
@@ -108,31 +130,58 @@ body{color:var(--tx);font-family:-apple-system,'SF Pro Display',sans-serif;overf
 .dstitle{font-size:13px;color:var(--tx);font-weight:500;}
 .dsdtl{font-size:11px;color:var(--tx2);margin-top:2px;line-height:1.4;}
 .dstime{font-size:10px;color:var(--tx3);margin-top:3px;}
+.focus-tag{font-size:10px;color:var(--err);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+
+/* LOG */
 .li{width:100%;padding:11px 12px;background:var(--s2);border:.5px solid var(--b1);border-radius:var(--rs);color:var(--tx);font-size:13px;resize:none;font-family:inherit;line-height:1.5;-webkit-appearance:none;}
 .li:focus{outline:none;border-color:rgba(232,255,71,.3);}
 .lbtn{width:100%;padding:13px;border-radius:var(--rs);border:1px solid rgba(232,255,71,.35);background:rgba(232,255,71,.08);color:var(--acc);font-size:13px;font-weight:500;cursor:pointer;margin-top:8px;}
 .lbtn:active{transform:scale(.98);}
+.diff-row{display:flex;gap:6px;margin:8px 0;}
+.diff-btn{flex:1;padding:9px 4px;border-radius:var(--rs);border:1px solid var(--b2);background:var(--s2);color:var(--tx2);font-size:11px;cursor:pointer;text-align:center;transition:all .15s;}
+.diff-btn.sel-hard{border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.1);color:var(--err);}
+.diff-btn.sel-ok{border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.1);color:var(--warn);}
+.diff-btn.sel-good{border-color:rgba(74,222,128,.4);background:rgba(74,222,128,.1);color:var(--ok);}
+
+/* POSITION MAP */
+.map-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx2);}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.pos-info{background:var(--s2);border-radius:var(--r);padding:12px 14px;margin-top:10px;min-height:80px;border:.5px solid var(--b1);}
+.pos-info-title{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:3px;}
+.pos-info-sub{font-size:11px;color:var(--tx2);margin-bottom:8px;}
+.pos-info-row{display:flex;gap:12px;flex-wrap:wrap;}
+.pos-info-col{flex:1;min-width:100px;}
+.pos-info-label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3);margin-bottom:3px;}
+.pos-info-items{font-size:11px;color:var(--tx2);line-height:1.6;}
+.pos-mark-btn{margin-top:10px;padding:9px 14px;border-radius:var(--rs);border:1px solid rgba(232,255,71,.3);background:rgba(232,255,71,.07);color:var(--acc);font-size:12px;cursor:pointer;width:100%;}
+.pos-mark-btn:active{transform:scale(.98);}
+.pos-mark-btn.done{border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.07);color:var(--ok);}
+
+/* NOTIFICATIONS */
 .nbanner{background:rgba(232,255,71,.06);border:1px solid rgba(232,255,71,.18);border-radius:var(--r);padding:14px 15px;margin-bottom:12px;}
 .nbanner-title{font-size:13px;font-weight:500;color:var(--acc);margin-bottom:4px;}
 .nbanner-sub{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px;}
-.nenablebtn{width:100%;padding:12px;border-radius:var(--rs);border:none;background:var(--acc);color:#0a0a0b;font-size:13px;font-weight:600;cursor:pointer;}
-.nenablebtn:active{transform:scale(.98);}
-.nstatus{font-size:11px;color:var(--tx2);text-align:center;margin-top:7px;}
-.nitem{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--s2);border-radius:var(--rs);margin-bottom:5px;}
-.ntime{font-size:11px;color:var(--acc);min-width:42px;font-weight:500;}
-.ntext{font-size:12px;color:var(--tx2);line-height:1.4;}
+.rem-btn{display:block;width:100%;padding:11px 14px;border-radius:var(--rs);border:1px solid var(--b2);background:var(--s2);color:var(--tx);font-size:12px;cursor:pointer;text-align:left;margin-bottom:6px;text-decoration:none;}
+.rem-btn:active{transform:scale(.98);}
+.rem-time{font-size:11px;color:var(--acc);font-weight:500;display:block;margin-bottom:2px;}
+.rem-text{font-size:12px;color:var(--tx2);}
+
+/* STATS */
 .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
 .scard{background:var(--s1);border:.5px solid var(--b1);border-radius:var(--rs);padding:12px;}
 .snum{font-size:26px;font-weight:600;line-height:1;}
 .slabel{font-size:11px;color:var(--tx2);margin-top:4px;}
-.bb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#0c0c0e;border-top:1px solid rgba(255,255,255,.1);padding:10px 6px;padding-bottom:max(env(safe-area-inset-bottom),16px);display:flex;justify-content:space-around;z-index:100;}
-.bbb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 8px;border-radius:var(--rs);border:none;background:transparent;cursor:pointer;min-width:52px;}
+
+/* BOTTOM BAR */
+.bb{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#0c0c0e;border-top:1px solid rgba(255,255,255,.1);padding:10px 4px;padding-bottom:max(env(safe-area-inset-bottom),16px);display:flex;justify-content:space-around;z-index:100;}
+.bbb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 6px;border-radius:var(--rs);border:none;background:transparent;cursor:pointer;min-width:46px;}
 .bbb svg{stroke:#4a4a4a;transition:stroke .15s;}
-.bbb span{font-size:10px;color:#4a4a4a;font-weight:500;transition:color .15s;}
+.bbb span{font-size:9px;color:#4a4a4a;font-weight:500;transition:color .15s;}
 .bbb.on svg{stroke:#e8ff47;}
 .bbb.on span{color:#e8ff47;}
 .qcard{background:var(--s1);border:.5px solid var(--b1);border-radius:var(--r);padding:15px;position:relative;overflow:hidden;}
-.qmark{font-size:52px;color:rgba(232,255,71,.06);position:absolute;top:0;left:8px;font-family:Georgia,serif;line-height:1;}
+.qmark{font-size:50px;color:rgba(232,255,71,.06);position:absolute;top:0;left:8px;font-family:Georgia,serif;line-height:1;}
 .qtxt{font-size:13px;color:var(--tx);line-height:1.65;font-style:italic;position:relative;}
 .qauth{font-size:10px;color:var(--tx3);margin-top:7px;text-transform:uppercase;letter-spacing:.07em;}
 .pill-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px;}
@@ -147,10 +196,9 @@ body{color:var(--tx);font-family:-apple-system,'SF Pro Display',sans-serif;overf
 .wkdd.bj{background:rgba(232,255,71,.1);color:var(--acc);border-color:rgba(232,255,71,.35);}
 .wkdd.st{background:rgba(79,172,254,.1);color:var(--acc3);border-color:rgba(79,172,254,.35);}
 .wkdd.td{box-shadow:0 0 0 2px var(--acc);}
-.install-steps{counter-reset:step;}
-.install-step{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:.5px solid var(--b1);}
+.install-step{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:.5px solid var(--b1);}
 .install-step:last-child{border-bottom:none;}
-.step-num{width:24px;height:24px;border-radius:50%;background:rgba(232,255,71,.12);border:1px solid rgba(232,255,71,.3);color:var(--acc);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(232,255,71,.12);border:1px solid rgba(232,255,71,.3);color:var(--acc);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
 .step-txt{font-size:12px;color:var(--tx2);line-height:1.5;}
 .step-bold{color:var(--tx);font-weight:500;}
 </style>
@@ -169,8 +217,9 @@ body{color:var(--tx);font-family:-apple-system,'SF Pro Display',sans-serif;overf
     <button class="nb" onclick="go('week')">Week</button>
     <button class="nb" onclick="go('tech')">Techniques</button>
     <button class="nb" onclick="go('drill')">Drill Gen</button>
+    <button class="nb" onclick="go('map')">Position Map</button>
     <button class="nb" onclick="go('log')">Class Log</button>
-    <button class="nb" onclick="go('notif')">Notifications</button>
+    <button class="nb" onclick="go('notif')">Reminders</button>
     <button class="nb" onclick="go('stats')">Stats</button>
   </div>
   <div class="ct" id="ct"></div>
@@ -183,24 +232,31 @@ body{color:var(--tx);font-family:-apple-system,'SF Pro Display',sans-serif;overf
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><path d="M11 7v4l2.5 2.5" stroke-linecap="round"/></svg>
       <span>Learn</span>
     </button>
-    <button class="bbb" id="bb-drill" onclick="go('drill')">
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><path d="M5 11h12M13 7l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>Drill</span>
+    <button class="bbb" id="bb-map" onclick="go('map')">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><path d="M7 11h8M11 7v8" stroke-linecap="round"/></svg>
+      <span>Map</span>
     </button>
     <button class="bbb" id="bb-log" onclick="go('log')">
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><rect x="4" y="3" width="14" height="16" rx="2"/><path d="M8 8h6M8 12h4" stroke-linecap="round"/></svg>
       <span>Log</span>
     </button>
-    <button class="bbb" id="bb-notif" onclick="go('notif')">
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><path d="M11 3a6 6 0 016 6v3l1.5 2.5h-15L5 12V9a6 6 0 016-6z"/><path d="M9 17a2 2 0 004 0" stroke-linecap="round"/></svg>
-      <span>Alerts</span>
+    <button class="bbb" id="bb-stats" onclick="go('stats')">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="1.6"><path d="M4 16l4.5-5 3.5 3.5 5.5-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Stats</span>
     </button>
   </div>
 </div>
 
 <script>
-const SK='bjjos_v1';
-let S={water:0,smInt:0,smAuto:0,smLog:[],techSt:{},logs:[],classes:0,start:new Date().toISOString().split('T')[0],lastDay:'',notifEnabled:false};
+const SK='bjjos_v4';
+let S={
+  water:0, smInt:0, smAuto:0, smLog:[], smHistory:[],
+  techSt:{}, logs:[], classes:0,
+  start:new Date().toISOString().split('T')[0], lastDay:'',
+  tasks:{}, posProgress:{},
+  adaptiveFocus:[], lastAdaptiveUpdate:'',
+  weeklySmAvg:0, smDayCount:0
+};
 
 function loadS(){
   try{
@@ -208,7 +264,22 @@ function loadS(){
     if(d){
       const p=JSON.parse(d);
       const t=new Date().toISOString().split('T')[0];
-      if(p.lastDay!==t){p.water=0;p.smInt=0;p.smAuto=0;p.smLog=[];p.lastDay=t;}
+      if(p.lastDay!==t){
+        // Archive yesterday's smoke count
+        if(p.lastDay && (p.smInt+p.smAuto)>0){
+          if(!p.smHistory) p.smHistory=[];
+          p.smHistory.push({date:p.lastDay,total:p.smInt+p.smAuto,int:p.smInt,auto:p.smAuto});
+          if(p.smHistory.length>14) p.smHistory=p.smHistory.slice(-14);
+          // Recalculate rolling average
+          const recent=p.smHistory.slice(-7);
+          if(recent.length>=3){
+            p.weeklySmAvg=Math.round(recent.reduce((a,b)=>a+b.total,0)/recent.length);
+            p.smDayCount=recent.length;
+          }
+        }
+        p.water=0; p.smInt=0; p.smAuto=0; p.smLog=[];
+        p.tasks={}; p.lastDay=t;
+      }
       S={...S,...p};
     }else{S.lastDay=new Date().toISOString().split('T')[0];saveS();}
   }catch(e){}
@@ -223,35 +294,122 @@ function dayType(){
   return'rest';
 }
 
+// ADAPTIVE CURRICULUM ENGINE
+function getAdaptiveFocus(){
+  if(S.logs.length<3) return null;
+  const recent=S.logs.slice(-3);
+  const hardItems=[];
+  recent.forEach(l=>{
+    if(l.diff==='hard'&&l.techFocus) hardItems.push(l.techFocus);
+    if(l.c){
+      const txt=l.c.toLowerCase();
+      if(txt.includes('guard'))hardItems.push('guard');
+      if(txt.includes('back'))hardItems.push('back');
+      if(txt.includes('escape')||txt.includes('stuck'))hardItems.push('escape');
+      if(txt.includes('choke')||txt.includes('rnc'))hardItems.push('rnc');
+      if(txt.includes('turtle'))hardItems.push('turtle');
+      if(txt.includes('x guard')||txt.includes('xguard'))hardItems.push('xguard');
+    }
+  });
+  if(hardItems.length===0) return null;
+  const freq={};
+  hardItems.forEach(i=>{freq[i]=(freq[i]||0)+1;});
+  const top=Object.entries(freq).sort((a,b)=>b[1]-a[1])[0];
+  return top?top[0]:null;
+}
+
+function updateAdaptive(){
+  const focus=getAdaptiveFocus();
+  if(focus&&focus!==S.adaptiveFocus[0]){
+    S.adaptiveFocus=[focus,...S.adaptiveFocus].slice(0,3);
+    S.lastAdaptiveUpdate=new Date().toISOString().split('T')[0];
+    saveS();
+  }
+}
+
+// TASK SYSTEM
+const TASK_DEFS={
+  morning_mobility:{label:'Morning mobility / strength',dot:'d-t'},
+  eating1:{label:'Eating moment 1',dot:'d-e'},
+  eating2:{label:'Eating moment 2',dot:'d-e'},
+  bjj_class:{label:'BJJ class',dot:'d-t'},
+  walk:{label:'Walk with Liam',dot:'d-t'},
+  home_drill:{label:'Home drilling',dot:'d-t'},
+  post_meal:{label:'Post-class protein meal',dot:'d-e'},
+  mate_cutoff:{label:'Maté cut before 20:00',dot:'d-w'},
+};
+
+function getTasksForDay(type){
+  const base=['eating1','eating2','mate_cutoff'];
+  if(type==='bjj'||type==='drill') return [...base,'morning_mobility','bjj_class','post_meal'];
+  if(type==='str') return [...base,'morning_mobility','walk'];
+  if(type==='rest') return [...base,'walk'];
+  return base;
+}
+
+function toggleTask(id){
+  if(!S.tasks) S.tasks={};
+  S.tasks[id]=!S.tasks[id];
+  saveS();
+  rfTasks();
+  checkMissed();
+}
+
+function checkMissed(){
+  const h=new Date().getHours();
+  if(h<20) return;
+  const type=dayType();
+  const tasks=getTasksForDay(type);
+  const missed=tasks.filter(t=>!S.tasks[t]);
+  if(missed.length>0){
+    // Store for stats
+    if(!S.missedLog) S.missedLog=[];
+    S.missedLog.push({date:S.lastDay,missed});
+    saveS();
+  }
+}
+
+// CIGARETTE ALERT
+function smAboveBaseline(){
+  if(S.smDayCount<3) return false; // not enough data yet
+  const today=S.smInt+S.smAuto;
+  return today>S.weeklySmAvg*1.3; // 30% above rolling average
+}
+
+function daysUntilBaseline(){
+  const days=S.smHistory?S.smHistory.length:0;
+  return Math.max(0,3-days);
+}
+
 const TECHS=[
   {id:'back',title:'Back control — seatbelt',phase:'Month 1–2 · Core system',vid:'baSqWCtLysU',vtitle:'BJJ Fundamentals: Back Mount Seatbelt Control',
-   detail:'The back is the highest-value position in BJJ. Seatbelt grip (one arm over shoulder, one under armpit), both heels hooked inside their thighs, hips pressed tight behind theirs. Whoever takes the back controls the fight.',
-   keys:['Seatbelt: top arm over shoulder, bottom under armpit — hands clasped','Both heels hooked inside thighs, pointing inward','Hips glued to their lower back — zero space','When they escape, follow their shoulders not their hips'],
-   drill:'Partner turtles. You get seatbelt + both hooks. Hold 30s while they resist. 15 reps each. Focus: keep top arm connected.'},
+   detail:'The back is the highest-value position in BJJ. Seatbelt grip (one arm over shoulder, one under armpit), both heels hooked inside their thighs, hips pressed tight behind theirs.',
+   keys:['Seatbelt: top arm over shoulder, bottom under armpit — hands clasped','Both heels hooked inside thighs, pointing inward','Hips glued to lower back — zero space','When they escape, follow shoulders not hips'],
+   drill:'Partner turtles. You get seatbelt + both hooks. Hold 30s while they resist. 15 reps each.'},
   {id:'rnc',title:'Rear naked choke (RNC)',phase:'Month 1–2 · Primary finish',vid:'l8-JI7NND3E',vtitle:'How To Perform The Perfect RNC — John Danaher',
-   detail:'Primary submission from the back. Forearm blade under the chin — never the wrist or throat. Choking arm hand grips your own bicep. Free hand behind their head as back-pressure. Squeeze elbows AND extend chest backward simultaneously.',
-   keys:['Blade of forearm under chin — not the wrist','Threaten with other arm to make them lift their chin','Bicep grip: your hand cups the back of their head','Finish: elbows together + chest extends back at the same time'],
-   drill:'In back control, drill getting arm under chin without squeezing. Position only, 20x. Build the motor pattern before the squeeze.'},
+   detail:'Forearm blade under the chin — never wrist or throat. Choking arm hand grips your own bicep. Free hand behind their head. Squeeze elbows AND extend chest backward simultaneously.',
+   keys:['Blade of forearm under chin — not the wrist','Threaten with other arm to make them lift chin','Bicep grip: hand cups back of their head','Finish: elbows together + chest extends back'],
+   drill:'In back control, drill arm under chin without squeezing. Position only, 20x. Motor pattern first.'},
   {id:'turtle',title:'Back take from turtle',phase:'Month 1–2 · Primary entry',vid:'3TgVQ-rmS8w',vtitle:'BJJ Back Take from Turtle — Competition Tested',
-   detail:'When someone turtles (all fours), this is your main entry. Approach from the side, establish seatbelt chest-to-back, insert bottom hook first, tilt them to get the top hook. This is the most common back take entry you will hit in sparring.',
-   keys:['Approach from the side — not directly from behind','Chest-to-back contact before hooks','Insert bottom hook first (inside knee), tilt for top hook','Pull far shoulder back to expose the back for the tilt'],
-   drill:'Partner turtles. Practice seatbelt entry from the side + tilt. No hooks yet — just the entry motion. 15 reps each side.'},
+   detail:'Approach from the side, establish seatbelt chest-to-back, insert bottom hook first, tilt to get top hook. Most common back take entry you will hit in sparring.',
+   keys:['Approach from the side — not directly from behind','Chest-to-back contact before hooks','Insert bottom hook first, then tilt for top','Pull far shoulder back to expose the back'],
+   drill:'Partner turtles. Seatbelt entry from the side + tilt. 15 reps each side.'},
   {id:'guard',title:'Guard recovery — shrimping',phase:'Month 1–2 · Survival',vid:'SdAhRzGrO1k',vtitle:'How To Shrimp in BJJ — Hip Escape Fundamentals',
-   detail:'When someone passes your guard, recovering it is more important than any attack. Frame on their hip with your forearm, shrimp your hips away, re-establish guard. The shrimp is the most fundamental defensive movement in BJJ.',
-   keys:['Forearm frame on hip — not palm, forearm is structural','Shrimp hips away from them — create distance','Outside knee comes in as shield while you re-guard','From side control: elbow-knee frame is your first move'],
-   drill:'Solo: shrimp across the mat and back 5 times every session. This is the #1 solo BJJ drill. No mat needed — any floor space.'},
+   detail:'Frame on their hip with forearm, shrimp hips away, re-establish guard. The shrimp is the most fundamental defensive movement in BJJ.',
+   keys:['Forearm frame on hip — structural, not palm','Shrimp hips away — create distance','Outside knee in as shield while you re-guard','From side control: elbow-knee frame first'],
+   drill:'Solo: shrimp across the mat and back 5 times every session. No mat needed.'},
   {id:'xguard',title:'X-guard sweep',phase:'Now · Already learning in class',vid:'f7A1vv0-A2U',vtitle:'Basic X Guard Sweep — Bernardo Faria',
-   detail:'You are being shown this now. X-guard: you are underneath with both legs creating an X around their base. Sweep direction: the side where you extend your bottom leg. Come up on top immediately after the sweep.',
-   keys:['Feet control their ankle AND back of knee — not just hanging','Sweep only to the side where you extend bottom leg','Entry: sit under them as they stand or posture up','After sweep: stand up on top immediately — do not stay on back'],
-   drill:'Drill the leg position on a seated partner — get into X-guard shape and feel both control points. 10 reps each.'},
+   detail:'Both legs create an X around their base. Sweep to the side where you extend your bottom leg. Come up on top immediately.',
+   keys:['Feet control ankle AND back of knee','Sweep to side where you extend bottom leg','Entry: sit under them as they stand','After sweep: stand up immediately'],
+   drill:'Drill leg position on seated partner. Feel both control points. 10 reps.'},
   {id:'bow',title:'Bow and arrow choke',phase:'Month 2–3 · Gi finish',vid:'xqNhZVNhxnE',vtitle:'How To Bow and Arrow Choke From Back Control',
-   detail:'Most powerful choke in gi BJJ. From back control: thumb-in collar grip as deep as possible (knuckles near jaw). Bottom hand grips gi at the knee. Extend your body like a bow — they have no defense when both grips are locked.',
-   keys:['Thumb-in collar grip — knuckles toward jaw, as deep as possible','Bottom hand grips gi at the knee, not the ankle','Extend: straighten bottom leg while pulling collar and knee apart','You lose bottom hook — replace it with the knee grip'],
-   drill:'Drill collar grip only in back control. Thumb-in, deepening each rep, 20 times. No finish yet — just the grip.'},
+   detail:'Thumb-in collar grip as deep as possible. Bottom hand grips gi at the knee. Extend body like a bow.',
+   keys:['Thumb-in collar — knuckles toward jaw','Bottom hand at the knee, not ankle','Extend: straighten bottom leg, pull collar and knee apart','Lose bottom hook — replace with knee grip'],
+   drill:'Drill collar grip only. Thumb-in, deepening each rep, 20 times.'},
 ];
 
 const QUOTES=[
-  {t:"Position before submission. Always. If you skip position, the submission will be taken from you.",a:"Gracie principle"},
+  {t:"Position before submission. Always.",a:"Gracie principle"},
   {t:"The problem is not the problem. The problem is your attitude about the problem.",a:"John Danaher"},
   {t:"The most important thing is to get to the mat. Everything else is details.",a:"Marcelo Garcia"},
   {t:"You picked this sport at 36 with a full life. That is exactly the kind of person this sport was made for.",a:"Your situation, honestly"},
@@ -260,67 +418,100 @@ const QUOTES=[
   {t:"The goal is not to be better than the other person. It is to be better than your previous self.",a:"Universal truth"},
 ];
 
-const NOTIFS=[
-  {time:'6:30',txt:'Wake up. 500ml water before anything else.',dot:'d-w'},
-  {time:'7:00',txt:'Eating moment 1 — eggs or labneh + bread. 5 min.',dot:'d-e'},
-  {time:'9:00',txt:'Desk water bottle. Finish 500ml before 11am.',dot:'d-w'},
-  {time:'13:00',txt:'Eating moment 2 — order or eat at home.',dot:'d-e'},
-  {time:'15:00',txt:'Afternoon water push. 500ml now.',dot:'d-w'},
-  {time:'17:30',txt:'BJJ days: gear ready. Non-BJJ: walk with Liam.',dot:'d-t'},
-  {time:'20:00',txt:'Last water push. Cut the mate after this.',dot:'d-w'},
-  {time:'22:00',txt:'Post-class meal window. Protein within 90min.',dot:'d-e'},
-];
+const POS_DATA={
+  back:{title:'Back control',tier:'Dominant',color:'#534AB7',subs:['Rear naked choke','Bow and arrow (gi)','Rear triangle','Arm bar'],trans:['→ Mount (one hook lost)','→ North-south (roll)','→ Side control (they turn in)'],note:'Your north star. Build everything toward here.'},
+  mount:{title:'Mount',tier:'Dominant',color:'#534AB7',subs:['Arm bar','Cross collar choke','Ezekiel choke','Arm triangle'],trans:['→ Back (they turn)','→ Side control (they bridge)'],note:'Second best. Leads to back when they escape.'},
+  ns:{title:'North-south',tier:'Dominant',color:'#534AB7',subs:['North-south choke','Kimura','Arm bar'],trans:['→ Side control','→ Mount','→ Back (they turn)'],note:'Good rest position. Kimura and NS choke from here.'},
+  side:{title:'Side control',tier:'Neutral-dominant',color:'#0F6E56',subs:['Kimura','Americana','Arm bar','Arm triangle'],trans:['→ Mount (walk knees up)','→ Knee on belly','→ Back (they turtle)'],note:'Launching pad for all dominant positions.'},
+  kob:{title:'Knee on belly',tier:'Neutral-dominant',color:'#0F6E56',subs:['Far arm bar','Collar choke (gi)','Kimura'],trans:['→ Mount (step over)','→ Back (they turn away)'],note:'Forces reaction — bridge into mount or turn into back.'},
+  turtle:{title:'Turtle (defending)',tier:'Neutral-defensive',color:'#854F0B',subs:['None from here'],trans:['→ Guard (roll before hooks)','→ Stand up (scramble)'],note:'Window is small. Move immediately. Back is at risk.'},
+  closed:{title:'Closed guard',tier:'Neutral',color:'#0F6E56',subs:['Triangle','Arm bar','Kimura','Guillotine','Omoplata'],trans:['→ X-guard (they posture)','→ Back (sweep + take)','→ Half guard (they step)'],note:'Future home of your triangle system.'},
+  half:{title:'Half guard',tier:'Neutral',color:'#0F6E56',subs:['Kimura','Guillotine','Leg lock entries'],trans:['→ Full guard','→ X-guard (underhook)','→ Back (underhook sweep)'],note:'Underhook is the key. Get it first.'},
+  xguard:{title:'X-guard',tier:'Neutral',color:'#0F6E56',subs:['Ankle lock entries','Leg lock entries'],trans:['→ Top position (sweep)','→ Half guard (they step)'],note:'Learning now. Both feet must control base.'},
+  undermount:{title:'Under mount',tier:'Defensive',color:'#993C1D',subs:['None — escape only'],trans:['→ Closed guard (bridge+shrimp)','→ Half guard'],note:'Escape via bridge and shrimp. Drill elbow-knee escape.'},
+  underside:{title:'Under side control',tier:'Defensive',color:'#993C1D',subs:['None — escape only'],trans:['→ Closed guard (shrimp)','→ Half guard'],note:'Elbow-knee frame immediately. Never lie flat.'},
+  underback:{title:'Back taken',tier:'Defensive — most dangerous',color:'#7f1d1d',subs:['None — survive only'],trans:['→ Turtle (peel one hook)'],note:'Protect neck first. Tap before choke locks fully.'},
+};
 
 function stCls(id){const s=S.techSt[id]||'Learning';return{Learning:'sl0',Drilling:'sl1','Feeling it':'sl2','Got it':'sl3'}[s]||'sl0';}
 function stLbl(id){return S.techSt[id]||'Learning';}
 
-let curTab='today';
-let dtime='20',dpart='yes';
+let curTab='today',dtime='20',dpart='yes',selDiff='',selTech='',selPos=null;
 
 function go(tab){
   curTab=tab;
-  document.querySelectorAll('.nb').forEach((b,i)=>{b.classList.toggle('on',['today','week','tech','drill','log','notif','stats'][i]===tab);});
-  ['today','tech','drill','log','notif'].forEach(t=>{const bb=document.getElementById('bb-'+t);if(bb)bb.classList.toggle('on',t===tab);});
-  const c=document.getElementById('ct');
-  c.scrollTop=0;
+  document.querySelectorAll('.nb').forEach((b,i)=>{b.classList.toggle('on',['today','week','tech','drill','map','log','notif','stats'][i]===tab);});
+  ['today','tech','map','log','stats'].forEach(t=>{const bb=document.getElementById('bb-'+t);if(bb)bb.classList.toggle('on',t===tab);});
+  const c=document.getElementById('ct');c.scrollTop=0;
   if(tab==='today')c.innerHTML=rToday();
   else if(tab==='week')c.innerHTML=rWeek();
   else if(tab==='tech')c.innerHTML=rTech();
   else if(tab==='drill')c.innerHTML=rDrill();
+  else if(tab==='map')c.innerHTML=rMap();
   else if(tab==='log')c.innerHTML=rLog();
   else if(tab==='notif')c.innerHTML=rNotif();
   else if(tab==='stats')c.innerHTML=rStats();
-  if(tab==='today'){setTimeout(()=>{rfWater();rfSmoke();},10);}
+  if(tab==='today'){setTimeout(()=>{rfTasks();rfWater();rfSmoke();},10);}
 }
 
 function rToday(){
   const type=dayType();
   const isBJJ=type==='bjj'||type==='drill';
-  const tl=[
-    {t:'6:30',dot:'d-w',n:'Wake + 500ml water',s:'Before anything else. You wake up dehydrated every morning.'},
-    {t:'7:00',dot:'d-e',n:'Eating moment 1',s:'Eggs or labneh + bread. 5 min. Non-negotiable.'},
-    {t:'7:20',dot:isBJJ?'d-r':'d-t',n:isBJJ?'Mobility only — 10 min':'Strength session — 25 min',s:isBJJ?'Hips, thoracic, neck rolls. No strength before class.':'Check Drill tab for today\'s program.'},
-    {t:'9:00',dot:'d-w',n:'Desk bottle — 500ml',s:'Finish before 11am. Alongside or instead of mate.'},
-    {t:'13:00',dot:'d-e',n:'Eating moment 2',s:'Shawarma, grilled chicken, hummus, falafel — all good here.'},
-    {t:'15:00',dot:'d-w',n:'500ml water',s:isBJJ?'Pre-class hydration window. Important.':'Afternoon push.'},
-  ];
-  if(isBJJ){
-    tl.push({t:'18:00',dot:'d-t',n:"Liam's BJJ class",s:'Watch closely. You learn a lot by watching.'});
-    tl.push({t:'19:30',dot:'d-t',n:type==='drill'?'Wednesday sparring':'Your BJJ class',s:type==='drill'?'One mental note per round. Tap early — always.':'Pick ONE thing to try. Not winning — one thing.'});
-  }else{
-    tl.push({t:'17:00',dot:'d-t',n:'Walk with Liam (~1hr)',s:'Active recovery. Let your brain process BJJ passively.'});
-  }
-  tl.push(
-    {t:'20:00',dot:'d-w',n:'Last water push — 500ml',s:'Cut mate after this. Sleep improves within days.'},
-    {t:'22:00',dot:'d-e',n:'Main meal',s:isBJJ?'Post-class protein window. Grilled anything within 90min.':'Keep it light tonight.'}
-  );
+  const focus=getAdaptiveFocus();
   const q=QUOTES[new Date().getDay()%QUOTES.length];
-  return`<div class="sec"><div class="sl">Daily flow</div>
-    <div class="card"><div class="tl">${tl.map(i=>`<div class="tli"><span class="tlt">${i.t}</span><div class="tld ${i.dot}"></div><div><div class="tln">${i.n}</div><div class="tlsub">${i.s}</div></div></div>`).join('')}</div></div></div>
+  let adaptiveHtml='';
+  if(focus&&S.logs.length>=3){
+    const focusLabels={back:'back control',rnc:'rear naked choke',turtle:'turtle entries',guard:'guard recovery',xguard:'X-guard sweeps',escape:'escape movements'};
+    adaptiveHtml=`<div class="insight-card">
+      <div class="insight-tag">Adaptive focus — based on last 3 sessions</div>
+      <div class="insight-text">Your logs show difficulty with <strong style="color:var(--tx)">${focusLabels[focus]||focus}</strong>. Today's drill session and home practice are prioritizing this. Keep logging and the plan adjusts with you.</div>
+    </div>`;
+  }
+  return`${adaptiveHtml}
+  <div class="sec"><div class="sl">Today's tasks</div>
+    <div class="card" id="tasks-wrap"></div>
+  </div>
   <div class="sec"><div class="sl">Hydration</div><div class="card" id="water-wrap"></div></div>
   <div class="sec"><div class="sl">Smoking awareness</div><div class="card" id="smoke-wrap"></div></div>
   <div class="sec"><div class="sl">Today's mindset</div>
     <div class="qcard"><div class="qmark">"</div><div class="qtxt">${q.t}</div><div class="qauth">${q.a}</div></div></div>`;
+}
+
+function rfTasks(){
+  const wrap=document.getElementById('tasks-wrap');if(!wrap)return;
+  const type=dayType();
+  const tasks=getTasksForDay(type);
+  const isBJJ=type==='bjj'||type==='drill';
+  const timeMap={
+    eating1:'7:00',morning_mobility:'7:20',eating2:'13:00',
+    bjj_class:'19:30',walk:'17:00',home_drill:'17:00',
+    post_meal:'21:30',mate_cutoff:'20:00'
+  };
+  const noteMap={
+    eating1:'Eggs or labneh + bread. 5 min.',
+    morning_mobility:isBJJ?'Mobility only — hips, thoracic, neck.':'Strength session — see Drill tab.',
+    eating2:'Shawarma, grilled chicken, hummus — order or home.',
+    bjj_class:type==='drill'?'Sparring — one mental note per round.':'Pick ONE thing to try. Not winning — one thing.',
+    walk:'Active recovery with Liam.',
+    home_drill:'Partner or solo — see Drill Gen tab.',
+    post_meal:'Protein within 90min of class ending.',
+    mate_cutoff:'Switch to water only after this.'
+  };
+  wrap.innerHTML=tasks.map(id=>{
+    const done=!!S.tasks[id];
+    const def=TASK_DEFS[id];
+    return`<div class="tli ${done?'completed':''}">
+      <span class="tlt">${timeMap[id]||'—'}</span>
+      <div class="tld ${def.dot}"></div>
+      <div class="tl-check" style="flex:1">
+        <div class="tln">${def.label}</div>
+        <div class="tlsub">${noteMap[id]||''}</div>
+      </div>
+      <div class="chkbox ${done?'done':''}" onclick="toggleTask('${id}')">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5L5.5 10L11 3" stroke="#0a0a0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function rfWater(){
@@ -331,28 +522,40 @@ function rfWater(){
   wrap.innerHTML=`<div class="wr">${cups}</div>
     <div style="margin-top:7px;font-size:11px;color:var(--tx2)">${S.water*250}ml of ${max*250}ml target</div>
     <div class="wbtns">
-      <button class="wbtn wr2" onclick="adjW(-1)">− Remove last</button>
+      <button class="wbtn wr2" onclick="adjW(-1)">− Remove</button>
       <button class="wbtn wa" onclick="adjW(1)">+ Add 250ml</button>
-    </div>`;
-}
+    </div>`;}
 function setW(n){S.water=n;saveS();rfWater();}
 function adjW(d){const isBJJ=dayType()==='bjj'||dayType()==='drill';const max=isBJJ?7:6;S.water=Math.max(0,Math.min(max,S.water+d));saveS();rfWater();}
 
 function rfSmoke(){
   const wrap=document.getElementById('smoke-wrap');if(!wrap)return;
   const tot=S.smInt+S.smAuto;const pct=tot?Math.round(S.smInt/tot*100):0;
-  wrap.innerHTML=`<div style="font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:9px">Log each cigarette. Intentional = you chose it consciously. Automatic = habit, did not think about it. The ratio over weeks is the insight.</div>
+  const daysLeft=daysUntilBaseline();
+  const aboveNorm=smAboveBaseline();
+  let alertHtml='';
+  if(aboveNorm){
+    alertHtml=`<div class="sm-alert">You are above your daily average (${S.weeklySmAvg} cigs). Automatic ones are the easiest to cut — each one is a habit trigger, not a craving.</div>`;
+  }
+  let baselineHtml='';
+  if(daysLeft>0){
+    baselineHtml=`<div class="sm-baseline-info">Learning your baseline — ${daysLeft} more day${daysLeft>1?'s':''} of logging needed before alerts activate.</div>`;
+  } else if(S.weeklySmAvg>0){
+    baselineHtml=`<div class="sm-baseline-info">Your rolling average: ${S.weeklySmAvg} cigarettes/day. Alerts fire when you exceed this by 30%.</div>`;
+  }
+  wrap.innerHTML=`<div style="font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:9px">Intentional = you chose it. Automatic = habit. Log every one — the ratio is the data.</div>
     <div class="smbtns">
       <button class="smb si" onclick="logSm('i')">+ Intentional<br><span style="font-size:10px;font-weight:400;opacity:.8">I chose this one</span></button>
-      <button class="smb sa" onclick="logSm('a')">+ Automatic<br><span style="font-size:10px;font-weight:400;opacity:.8">Did not think about it</span></button>
+      <button class="smb sa" onclick="logSm('a')">+ Automatic<br><span style="font-size:10px;font-weight:400;opacity:.8">Didn't think about it</span></button>
     </div>
     <div class="smcts">
       <div class="smc"><div class="smcn" style="color:var(--ok)">${S.smInt}</div><div class="smcl">intentional</div></div>
       <div class="smc"><div class="smcn" style="color:var(--warn)">${S.smAuto}</div><div class="smcl">automatic</div></div>
       <div class="smc"><div class="smcn" style="color:var(--tx)">${tot}</div><div class="smcl">total</div></div>
     </div>
-    ${tot>0?`<button class="smundo" onclick="undoSm()">↩ Undo last entry</button>
-    <div style="margin-top:9px;font-size:11px;color:var(--tx2);padding:8px 11px;background:var(--s2);border-radius:var(--rs);line-height:1.5">${pct}% intentional today. ${pct>60?'Good — you are choosing most of them consciously.':'Most are automatic. These are habit triggers, not cravings. Easier to break.'}</div>`:''}`;
+    ${tot>0?`<button class="smundo" onclick="undoSm()">↩ Undo last entry</button>`:''}
+    ${alertHtml}${baselineHtml}
+    ${tot>0&&!aboveNorm&&daysLeft===0?`<div class="sm-baseline-info">${pct}% intentional today. ${pct>60?'Good — most are conscious choices.':'Mostly automatic — habit triggers, not cravings.'}</div>`:''}`;
 }
 function logSm(t){if(t==='i')S.smInt++;else S.smAuto++;S.smLog.push({t,time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})});saveS();rfSmoke();}
 function undoSm(){if(!S.smLog.length)return;const l=S.smLog.pop();if(l.t==='i'&&S.smInt>0)S.smInt--;else if(l.t==='a'&&S.smAuto>0)S.smAuto--;saveS();rfSmoke();}
@@ -381,16 +584,36 @@ function rWeek(){
 }
 
 function rTech(){
-  return`<div class="sec"><div class="sl">Your technique library</div>
-    <div style="font-size:11px;color:var(--tx2);margin-bottom:12px;line-height:1.6">Zero starting point. Back take system — techniques build in sequence. Tap to expand. Videos show real people demonstrating the exact position.</div>
-    ${TECHS.map(t=>`<div class="tc" id="tc-${t.id}" onclick="togTech('${t.id}')">
+  const focus=getAdaptiveFocus();
+  const focusMap={back:'back',rnc:'rnc',turtle:'turtle',guard:'guard',xguard:'xguard',escape:'guard'};
+  const focusId=focus?focusMap[focus]:null;
+  let adaptiveNote='';
+  if(focusId&&S.logs.length>=3){
+    adaptiveNote=`<div class="insight-card" style="margin-bottom:12px">
+      <div class="insight-tag">Adaptive — based on last 3 sessions</div>
+      <div class="insight-text">Prioritizing techniques related to your logged difficulty. The highlighted technique appears first.</div>
+    </div>`;
+  }
+  const sorted=[...TECHS].sort((a,b)=>{
+    if(a.id===focusId)return -1;
+    if(b.id===focusId)return 1;
+    return 0;
+  });
+  return`<div class="sec"><div class="sl">Technique library</div>
+    ${adaptiveNote}
+    <div style="font-size:11px;color:var(--tx2);margin-bottom:12px;line-height:1.6">Tap to expand. Update your status — the app adapts your drills based on what you log in Class Log.</div>
+    ${sorted.map(t=>`<div class="tc" id="tc-${t.id}" onclick="togTech('${t.id}')">
       <div class="tch">
-        <div style="flex:1"><div class="tctitle">${t.title}</div><div class="tcph">${t.phase}</div></div>
+        <div style="flex:1">
+          ${t.id===focusId?`<div class="tc-priority">⚑ Priority this week</div>`:''}
+          <div class="tctitle">${t.title}</div>
+          <div class="tcph">${t.phase}</div>
+        </div>
         <div class="tcr"><span class="tcs ${stCls(t.id)}">${stLbl(t.id)}</span><span class="chv">▾</span></div>
       </div>
       <div class="tcb">
         <a class="yt-thumb" href="https://www.youtube.com/watch?v=${t.vid}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-          <img src="https://img.youtube.com/vi/${t.vid}/hqdefault.jpg" alt="${t.title} BJJ tutorial" loading="lazy"/>
+          <img src="https://img.youtube.com/vi/${t.vid}/hqdefault.jpg" alt="${t.title}" loading="lazy"/>
           <div class="yt-overlay"><div class="yt-play"><svg width="20" height="20" viewBox="0 0 20 20" fill="white"><path d="M7 4l10 6-10 6V4z"/></svg></div></div>
           <div class="yt-label">${t.vtitle}</div>
         </a>
@@ -408,52 +631,175 @@ function togTech(id){const c=document.getElementById('tc-'+id);if(c)c.classList.
 function setSt(e,id,s){e.stopPropagation();S.techSt[id]=s;saveS();go('tech');}
 
 function rDrill(){
+  const focus=getAdaptiveFocus();
+  const focusLabels={back:'back control',rnc:'RNC finishing',turtle:'turtle entries',guard:'guard recovery',xguard:'X-guard',escape:'escape movements'};
+  const focusNote=focus&&S.logs.length>=3?`<div class="insight-card" style="margin-bottom:10px">
+    <div class="insight-tag">Adaptive — based on last 3 sessions</div>
+    <div class="insight-text">Session weighted toward <strong style="color:var(--tx)">${focusLabels[focus]||focus}</strong> based on your recent logs.</div>
+  </div>`:'';
   return`<div class="sec"><div class="sl">Generate drilling session</div>
+    ${focusNote}
     <div class="card">
       <div class="ct-sub" style="margin-bottom:8px">How long do you have?</div>
       <div class="drow">${['10','20','30'].map(t=>`<div class="dopt ${dtime===t?'ds':''}" onclick="setDO('t','${t}')">${t} min</div>`).join('')}</div>
       <div class="ct-sub" style="margin-bottom:8px">Is your brother here?</div>
       <div class="drow">
-        <div class="dopt ${dpart==='yes'?'ds':''}" onclick="setDO('p','yes')">Yes, he is here</div>
+        <div class="dopt ${dpart==='yes'?'ds':''}" onclick="setDO('p','yes')">Yes, he's here</div>
         <div class="dopt ${dpart==='no'?'ds':''}" onclick="setDO('p','no')">Solo today</div>
       </div>
       <button class="gbtn" onclick="genDrill()">Generate session</button>
     </div>
     <div id="dout"></div></div>
-  <div class="sec"><div class="sl">Morning strength programs</div>
-    <div class="card"><div class="ct-title">Day A — Hip & Pull</div><div class="ct-sub" style="margin-top:5px">KB swings 3×15 · DB Romanian deadlift 3×10 · DB rows 3×10 per side · Dead hang 3×max time</div></div>
+  <div class="sec"><div class="sl">Strength programs</div>
+    <div class="card"><div class="ct-title">Day A — Hip & Pull</div><div class="ct-sub" style="margin-top:5px">KB swings 3×15 · DB Romanian deadlift 3×10 · DB rows 3×10/side · Dead hang 3×max</div></div>
     <div class="card"><div class="ct-title">Day B — Push & Core</div><div class="ct-sub" style="margin-top:5px">Push-ups 4×failure · DB overhead press 3×10 · Plank 3×40s · Hollow body hold 3×20s</div></div>
-    <div class="card"><div class="ct-title">Day C — Mobility (non-negotiable)</div><div class="ct-sub" style="margin-top:5px">Hip flexors 5min · Thoracic rotation 3×10 per side · Glute bridges 3×15 · Neck static hold · Shoulder circles</div></div>
+    <div class="card"><div class="ct-title">Day C — Mobility</div><div class="ct-sub" style="margin-top:5px">Hip flexors 5min · Thoracic rotation 3×10/side · Glute bridges 3×15 · Neck static hold · Shoulder circles</div></div>
   </div>`;
 }
 function setDO(type,val){if(type==='t')dtime=val;else dpart=val;document.getElementById('ct').innerHTML=rDrill();}
 function genDrill(){
   const t=parseInt(dtime),p=dpart==='yes';
+  const focus=getAdaptiveFocus();
+  const focusSteps={
+    guard:[{title:'Guard recovery — priority drill',d:'Partner in your guard tries to pass. You shrimp and replace guard ONLY. No attacks. 20 reps each side. Every rep.',time:'8 min'}],
+    back:[{title:'Back control — priority drill',d:'Turtle to back take 20 reps. Then hold back control for 45s each with partner resisting. Focus: seatbelt stays connected.',time:'8 min'}],
+    turtle:[{title:'Turtle escape — priority drill',d:'Partner on your back in turtle. You must recover guard before hooks go in. 15 reps. Speed matters here.',time:'7 min'}],
+    rnc:[{title:'RNC mechanics — priority drill',d:'In back control, drill arm under chin to bicep grip 25 times without squeezing. Perfect position every rep.',time:'6 min'}],
+    xguard:[{title:'X-guard — priority drill',d:'Get into X-guard shape from seated position 15 times. Feel both control points (ankle + back of knee). Then sweep 10 times.',time:'7 min'}],
+    escape:[{title:'Side control escape — priority drill',d:'Under side control. Elbow-knee frame immediately, shrimp and recover guard. 20 reps each side.',time:'8 min'}],
+  };
   let steps=p?[
-    {title:'Warm-up — shrimping',d:'Shrimp across mat and back 3 times. Get hips moving before anything else.',time:'3 min'},
-    {title:'Back control hold',d:'You take back with seatbelt + hooks. Partner resists. Keep seatbelt connected — follow their shoulders.',time:t<=10?'4 min':'6 min'},
-    {title:'Turtle to back take entry',d:'Partner turtles. You drill seatbelt from the side + tilt. 10 reps each. Slow and deliberate.',time:t<=10?'4 min':'7 min'},
+    {title:'Warm-up — shrimping',d:'Shrimp across mat and back 3 times. Hips moving before anything.',time:'3 min'},
+    {title:'Back control hold',d:'Seatbelt + hooks. Partner resists. Keep connected. Follow shoulders.',time:t<=10?'4 min':'5 min'},
+    {title:'Turtle to back take',d:'Partner turtles. Seatbelt entry + tilt. 10 reps each. Slow.',time:t<=10?'4 min':'5 min'},
   ]:[
-    {title:'Hip escapes — shrimping',d:'Lie on back. Shrimp one end to other and back. 5 full lengths. Most important solo BJJ drill.',time:'4 min'},
-    {title:'Guard frame position',d:'On back. Practice elbow-knee frame: forearm on imaginary hip, knee as shield. Hold structure 10 times.',time:'3 min'},
-    {title:'Visualization — back take',d:'Eyes closed. Walk through turtle to seatbelt to hooks 10 times. Visualize each hand placement exactly.',time:'5 min'},
+    {title:'Hip escapes',d:'Shrimp one end to other and back. 5 full lengths.',time:'4 min'},
+    {title:'Guard frame hold',d:'On back. Elbow-knee frame structure. Hold 10 times.',time:'3 min'},
+    {title:'Visualization',d:'Eyes closed. Turtle → seatbelt → hooks. 10 times. Exact hand placement.',time:'5 min'},
   ];
-  if(t>=20&&p)steps.push({title:'RNC arm positioning',d:'In back control, drill arm under chin without squeezing. Position only, 15 reps each. Build motor pattern.',time:'6 min'});
-  if(t>=20&&p)steps.push({title:'Positional round',d:'Back control — you attacking. Live resistance. 2 rounds x 2 min. Maintain or finish.',time:'5 min'});
-  if(t>=20&&!p)steps.push({title:'Shoulder mobility',d:'Arm circles, thoracic rotation, shoulder stretches. Direct impact on back control quality.',time:'6 min'});
-  if(t>=20&&!p)steps.push({title:'Technique study',d:'Watch one technique video (see Techniques tab). Watch twice — first for the move, second for the WHY.',time:'7 min'});
-  if(t>=30)steps.push({title:'Guard recovery',d:p?'Partner tries to pass. You shrimp and replace guard only. Pure survival. No submissions.':'Slow-motion guard recovery: frame, shrimp, knee in. 10 reps each side.',time:'5 min'});
+  if(focus&&p&&focusSteps[focus]&&t>=20){
+    steps.splice(1,0,...focusSteps[focus]);
+  }
+  if(t>=20&&p&&!steps.find(s=>s.title.includes('RNC')))steps.push({title:'RNC arm positioning',d:'Back control, arm under chin without squeezing. Position only, 15 reps.',time:'5 min'});
+  if(t>=20&&p&&steps.length<5)steps.push({title:'Positional round',d:'Back control live. You attack, they resist. 2 rounds × 2 min.',time:'5 min'});
+  if(t>=20&&!p&&steps.length<4)steps.push({title:'Shoulder mobility',d:'Arm circles, thoracic rotation. Direct impact on back control.',time:'6 min'});
+  if(t>=30&&steps.length<6)steps.push({title:'Guard recovery',d:p?'Partner passes, you recover guard only. Survival. 15 reps.':'Slow-motion: frame, shrimp, knee in. 10 reps each side.',time:'5 min'});
   document.getElementById('dout').innerHTML=`<div class="dsession">
-    <div style="font-size:13px;font-weight:500;color:var(--acc);margin-bottom:11px">${t}-min ${p?'partner':'solo'} session — back take system</div>
+    <div style="font-size:13px;font-weight:500;color:var(--acc);margin-bottom:11px">${t}-min ${p?'partner':'solo'} session${focus&&S.logs.length>=3?' · adapted to your logs':''}</div>
     ${steps.map((s,i)=>`<div class="dstep"><div class="dsn">${i+1}</div><div><div class="dstitle">${s.title}</div><div class="dsdtl">${s.d}</div><div class="dstime">${s.time}</div></div></div>`).join('')}
   </div>`;}
 
+function rMap(){
+  const mapSvg=buildMapSvg();
+  const selData=selPos?POS_DATA[selPos]:null;
+  const isDone=selPos&&S.posProgress&&S.posProgress[selPos];
+  return`<div class="sec"><div class="sl">Position map</div>
+    <div class="map-legend">
+      <div class="leg-item"><div class="leg-dot" style="background:#534AB7"></div>Dominant</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#0F6E56"></div>Neutral</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#854F0B"></div>Defensive</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#4ade80"></div>Completed</div>
+    </div>
+    <div class="card" style="padding:10px">${mapSvg}</div>
+    <div class="pos-info" id="pos-info">
+      ${selData?`
+        <div class="pos-info-title">${selData.title}</div>
+        <div class="pos-info-sub" style="color:${selData.color}">${selData.tier}</div>
+        <div class="pos-info-row">
+          <div class="pos-info-col"><div class="pos-info-label">Submissions</div><div class="pos-info-items">${selData.subs.join('<br>')}</div></div>
+          <div class="pos-info-col"><div class="pos-info-label">Transitions</div><div class="pos-info-items">${selData.trans.join('<br>')}</div></div>
+        </div>
+        <div style="margin-top:9px;font-size:11px;color:var(--tx2);padding:8px 10px;background:var(--s1);border-radius:var(--rs);line-height:1.5">${selData.note}</div>
+        <button class="pos-mark-btn ${isDone?'done':''}" onclick="markPos('${selPos}')">
+          ${isDone?'✓ Marked as trained — tap to unmark':'Mark as trained today'}
+        </button>
+      `:`<div style="font-size:12px;color:var(--tx3);padding:8px 0">Tap any position on the map to see submissions, transitions, and notes.</div>`}
+    </div>
+  </div>`;
+}
+
+function buildMapSvg(){
+  const nodes=[
+    {id:'back',label:'Back control',x:220,y:30,w:150,h:52,color:'#534AB7',fill:'rgba(83,74,183,0.15)',tier:0},
+    {id:'mount',label:'Mount',x:60,y:30,w:120,h:52,color:'#534AB7',fill:'rgba(83,74,183,0.15)',tier:0},
+    {id:'ns',label:'North-south',x:400,y:30,w:130,h:52,color:'#534AB7',fill:'rgba(83,74,183,0.15)',tier:0},
+    {id:'side',label:'Side control',x:60,y:120,w:130,h:52,color:'#0F6E56',fill:'rgba(15,110,86,0.15)',tier:1},
+    {id:'kob',label:'Knee on belly',x:220,y:120,w:130,h:52,color:'#0F6E56',fill:'rgba(15,110,86,0.15)',tier:1},
+    {id:'turtle',label:'Turtle',x:400,y:120,w:120,h:52,color:'#854F0B',fill:'rgba(133,79,11,0.15)',tier:1},
+    {id:'closed',label:'Closed guard',x:40,y:215,w:130,h:52,color:'#0F6E56',fill:'rgba(15,110,86,0.15)',tier:2},
+    {id:'half',label:'Half guard',x:195,y:215,w:120,h:52,color:'#0F6E56',fill:'rgba(15,110,86,0.15)',tier:2},
+    {id:'xguard',label:'X-guard',x:340,y:215,w:120,h:52,color:'#0F6E56',fill:'rgba(15,110,86,0.15)',tier:2},
+    {id:'undermount',label:'Under mount',x:40,y:310,w:130,h:52,color:'#993C1D',fill:'rgba(153,60,29,0.15)',tier:3},
+    {id:'underside',label:'Under side ctrl',x:195,y:310,w:130,h:52,color:'#993C1D',fill:'rgba(153,60,29,0.15)',tier:3},
+    {id:'underback',label:'Back taken',x:365,y:310,w:120,h:52,color:'#7f1d1d',fill:'rgba(127,29,29,0.15)',tier:3},
+  ];
+  const arrows=[
+    {x1:295,y1:82,x2:170,y2:120},{x1:355,y1:82,x2:408,y2:120},
+    {x1:125,y1:82,x2:125,y2:120},{x1:180,y1:145,x2:220,y2:145},
+    {x1:400,y1:145,x2:390,y2:120,curved:true},
+    {x1:105,y1:172,x2:105,y2:215},{x1:285,y1:240,x2:195,y2:240},
+    {x1:315,y1:240,x2:340,y2:240},{x1:400,y1:215,x2:375,y2:172},
+    {x1:460,y1:172,x2:477,y2:310},{x1:105,y1:267,x2:105,y2:310},
+    {x1:260,y1:267,x2:260,y2:310},{x1:105,y1:215,x2:90,y2:172,dashed:true},
+  ];
+  const tierLabels=[
+    {x:5,y:56,text:'DOM',color:'#534AB7'},
+    {x:5,y:146,text:'NEU',color:'#0F6E56'},
+    {x:5,y:241,text:'GRD',color:'#0F6E56'},
+    {x:5,y:336,text:'DEF',color:'#993C1D'},
+  ];
+  let svgContent=`<defs><marker id="ma" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>`;
+  tierLabels.forEach(l=>{
+    svgContent+=`<text x="${l.x}" y="${l.y}" font-size="8" fill="${l.color}" font-family="-apple-system,sans-serif" font-weight="600" text-anchor="start" dominant-baseline="central" opacity="0.7">${l.text}</text>`;
+  });
+  arrows.forEach(a=>{
+    const dash=a.dashed?'stroke-dasharray="4 3"':'';
+    svgContent+=`<line x1="${a.x1}" y1="${a.y1}" x2="${a.x2}" y2="${a.y2}" stroke="rgba(255,255,255,0.15)" stroke-width="1" marker-end="url(#ma)" ${dash} fill="none"/>`;
+  });
+  nodes.forEach(n=>{
+    const done=S.posProgress&&S.posProgress[n.id];
+    const isSelected=selPos===n.id;
+    const fillColor=done?'rgba(74,222,128,0.2)':n.fill;
+    const strokeColor=done?'#4ade80':isSelected?'#e8ff47':n.color;
+    const strokeW=isSelected?1.5:0.5;
+    svgContent+=`<g onclick="tapPos('${n.id}')" style="cursor:pointer">
+      <rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="8" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeW}"/>
+      ${done?`<text x="${n.x+n.w-10}" y="${n.y+12}" font-size="9" fill="#4ade80" font-family="-apple-system,sans-serif" text-anchor="middle">✓</text>`:''}
+      <text x="${n.x+n.w/2}" y="${n.y+n.h/2-6}" font-size="11" fill="${done?'#4ade80':n.color}" font-family="-apple-system,sans-serif" font-weight="600" text-anchor="middle" dominant-baseline="central">${n.label}</text>
+      ${n.id==='back'?`<text x="${n.x+n.w/2}" y="${n.y+n.h/2+10}" font-size="8" fill="${n.color}" font-family="-apple-system,sans-serif" text-anchor="middle" opacity="0.7">★ north star</text>`:''}
+    </g>`;
+  });
+  return`<svg width="100%" viewBox="0 0 530 380" style="display:block">${svgContent}</svg>`;
+}
+
+function tapPos(id){
+  selPos=id;
+  go('map');
+}
+function markPos(id){
+  if(!S.posProgress)S.posProgress={};
+  S.posProgress[id]=!S.posProgress[id];
+  saveS();
+  go('map');
+}
+
 function rLog(){
   const entries=S.logs.slice(-5).reverse();
+  selDiff='';selTech='';
   return`<div class="sec"><div class="sl">Log today's class</div>
     <div class="card">
-      <div style="font-size:11px;color:var(--tx2);margin-bottom:10px;line-height:1.5">Two questions. Do this within an hour of finishing class while it is still fresh.</div>
-      <div style="font-size:12px;color:var(--tx2);margin-bottom:5px">One thing that worked</div>
+      <div style="font-size:11px;color:var(--tx2);margin-bottom:10px;line-height:1.5">Do this within an hour of class. Your logs adapt the drill plan.</div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:6px">How did it feel overall?</div>
+      <div class="diff-row">
+        <div class="diff-btn" id="d-hard" onclick="setDiff('hard')">Hard — struggled</div>
+        <div class="diff-btn" id="d-ok" onclick="setDiff('ok')">OK — getting there</div>
+        <div class="diff-btn" id="d-good" onclick="setDiff('good')">Good — felt it</div>
+      </div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:6px;margin-top:10px">Which technique were you focusing on?</div>
+      <div class="diff-row" style="flex-wrap:wrap">
+        ${['back','rnc','turtle','guard','xguard','bow'].map(id=>`<div class="diff-btn" id="t-${id}" onclick="setTech('${id}')" style="flex:none;padding:7px 10px">${TECHS.find(t=>t.id===id)?.title.split('—')[0].trim()||id}</div>`).join('')}
+      </div>
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:5px;margin-top:10px">One thing that worked</div>
       <textarea class="li" id="lw" rows="2" placeholder="Even tiny wins count..."></textarea>
       <div style="font-size:12px;color:var(--tx2);margin:10px 0 5px">One thing that caught you</div>
       <textarea class="li" id="lc" rows="2" placeholder="Be specific — position, moment, why..."></textarea>
@@ -461,84 +807,97 @@ function rLog(){
     </div></div>
   ${entries.length?`<div class="sec"><div class="sl">Recent entries</div>
     ${entries.map(e=>`<div class="card" style="margin-bottom:8px">
-      <div style="font-size:10px;color:var(--tx3);margin-bottom:5px">${e.date}</div>
+      <div style="font-size:10px;color:var(--tx3);margin-bottom:5px">${e.date}${e.diff?` · <span style="color:${e.diff==='hard'?'var(--err)':e.diff==='good'?'var(--ok)':'var(--warn)'}">${e.diff}</span>`:''}</div>
       ${e.w?`<div style="font-size:12px;color:var(--ok);margin-bottom:3px;line-height:1.4">+ ${e.w}</div>`:''}
       ${e.c?`<div style="font-size:12px;color:var(--warn);line-height:1.4">↓ ${e.c}</div>`:''}
     </div>`).join('')}</div>`:''}`;
 }
-function saveLog(){const w=document.getElementById('lw').value.trim(),c=document.getElementById('lc').value.trim();if(!w&&!c)return;S.logs.push({date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),w,c});S.classes++;saveS();go('log');}
+function setDiff(d){
+  selDiff=d;
+  ['hard','ok','good'].forEach(v=>{const el=document.getElementById('d-'+v);if(el)el.className='diff-btn'+(v===d?' sel-'+v:'');});
+}
+function setTech(id){
+  selTech=id;
+  ['back','rnc','turtle','guard','xguard','bow'].forEach(v=>{const el=document.getElementById('t-'+v);if(el){el.className='diff-btn'+(v===id?' sel-ok':'');}});
+}
+function saveLog(){
+  const w=document.getElementById('lw')?.value.trim();
+  const c=document.getElementById('lc')?.value.trim();
+  if(!w&&!c&&!selDiff) return;
+  S.logs.push({date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),w,c,diff:selDiff,techFocus:selTech});
+  S.classes++;
+  updateAdaptive();
+  saveS();
+  go('log');
+}
 
 function rNotif(){
-  const granted=S.notifEnabled&&typeof Notification!=='undefined'&&Notification.permission==='granted';
-  const denied=typeof Notification!=='undefined'&&Notification.permission==='denied';
-  return`<div class="sec"><div class="sl">Push notifications</div>
-    <div class="nbanner">
-      <div class="nbanner-title">${granted?'Notifications active':'Enable daily reminders'}</div>
-      <div class="nbanner-sub">${granted?'Your BJJ OS will send reminders at the right times throughout the day. Turn off anytime in iPhone Settings > Notifications.':denied?'Notifications are blocked. Go to iPhone Settings > Safari > Notifications, allow this site, then return here.':'Get timed reminders for water, food, training, and mate cutoff. For full background notifications, add to home screen first (see below).'}</div>
-      ${!denied?`<button class="nenablebtn" onclick="reqNotif()">${granted?'Send test notification':'Enable notifications'}</button>`:''}
-      <div class="nstatus" id="nstatus">${granted?'Active — reminders scheduled for today':'Tap above to allow'}</div>
-    </div></div>
-  <div class="sec"><div class="sl">Today's reminder schedule</div>
-    <div class="card">${NOTIFS.map(n=>`<div class="nitem"><span class="ntime">${n.time}</span><span class="ntext">${n.txt}</span></div>`).join('')}</div></div>
-  <div class="sec"><div class="sl">Add to iPhone home screen</div>
-    <div class="card"><div class="install-steps">
-      ${[
-        ['Open this URL in','Safari (not Chrome)'],
-        ['Tap the','Share button — the box with an arrow pointing up'],
-        ['Scroll down and tap','Add to Home Screen'],
-        ['Tap','Add in the top right corner'],
-        ['Open the app','from your home screen — it now runs like a native app'],
-        ['Come back to Notifications tab','and enable reminders'],
-      ].map((s,i)=>`<div class="install-step"><div class="step-num">${i+1}</div><div class="step-txt">${s[0]} <span class="step-bold">${s[1]}</span></div></div>`).join('')}
-    </div></div></div>
-  <div class="sec"><div class="sl">Android — add to home screen</div>
-    <div class="card"><div class="install-steps">
-      ${[
-        ['Open this URL in','Chrome on Android'],
-        ['Tap the three dots menu','top right corner'],
-        ['Tap','Add to Home Screen'],
-        ['Tap','Add to confirm'],
-        ['Open from home screen','and enable notifications here'],
-      ].map((s,i)=>`<div class="install-step"><div class="step-num">${i+1}</div><div class="step-txt">${s[0]} <span class="step-bold">${s[1]}</span></div></div>`).join('')}
-    </div></div></div>`;
-}
-function reqNotif(){
-  if(typeof Notification==='undefined'){alert('Open this app in Safari and add it to your home screen first for notifications to work.');return;}
-  if(Notification.permission==='granted'){
-    new Notification('BJJ OS',{body:'Test notification working. Daily reminders are active.',icon:'/icon-192.png'});
-    S.notifEnabled=true;saveS();
-    document.getElementById('nstatus').textContent='Test sent. Notifications working.';
-    scheduleNotifs();return;
+  const REMINDERS=[
+    {time:'6:30 AM',title:'Morning water',body:'500ml water before anything else.',cat:'cal'},
+    {time:'7:00 AM',title:'Eating moment 1',body:'Eggs or labneh + bread. 5 minutes.',cat:'cal'},
+    {time:'9:00 AM',title:'Desk water bottle',body:'500ml target before 11am.',cat:'cal'},
+    {time:'1:00 PM',title:'Eating moment 2',body:'Order or eat at home.',cat:'cal'},
+    {time:'3:00 PM',title:'Afternoon water',body:'500ml now.',cat:'cal'},
+    {time:'8:00 PM',title:'Cut the maté',body:'Switch to water only from here.',cat:'rem'},
+    {time:'10:00 PM',title:'Post-class meal',body:'Protein within 90min of training.',cat:'cal'},
+  ];
+  function encodeReminder(r){
+    const enc=encodeURIComponent;
+    if(r.cat==='cal'){
+      return`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${enc(r.title)}&details=${enc(r.body)}&recur=RRULE:FREQ=DAILY`;
+    }
+    return`x-apple-reminderkit://REMCDReminder?title=${enc(r.title)}&notes=${enc(r.body)}`;
   }
-  Notification.requestPermission().then(p=>{
-    if(p==='granted'){S.notifEnabled=true;saveS();new Notification('BJJ OS active',{body:'Daily reminders enabled. Stay on the mat.',icon:'/icon-192.png'});scheduleNotifs();go('notif');}
-    else{const el=document.getElementById('nstatus');if(el)el.textContent='Blocked. Check Safari Settings > Notifications.';}
-  });
-}
-function scheduleNotifs(){
-  if(typeof Notification==='undefined'||Notification.permission!=='granted')return;
-  const now=new Date();
-  NOTIFS.forEach(n=>{
-    const[h,m]=n.time.split(':').map(Number);
-    const target=new Date();target.setHours(h,m,0,0);
-    if(target>now){setTimeout(()=>{if(Notification.permission==='granted')new Notification('BJJ OS',{body:n.txt,tag:n.time,icon:'/icon-192.png'});},target-now);}
-  });
+  return`<div class="sec"><div class="sl">Set up daily reminders</div>
+    <div class="nbanner">
+      <div class="nbanner-title">iPhone reminders — reliable delivery</div>
+      <div class="nbanner-sub">Safari notifications only fire when the app is open. For reliable background alerts, add these directly to your iPhone Reminders or Google Calendar — they fire even when your phone is locked. Tap each one below.</div>
+    </div>
+    <div class="sec"><div class="sl">Tap to add each reminder</div>
+      ${REMINDERS.map(r=>`<a class="rem-btn" href="${encodeReminder(r)}" target="_blank">
+        <span class="rem-time">${r.time}</span>
+        <span class="rem-text">${r.title} — ${r.body}</span>
+      </a>`).join('')}
+    </div>
+    <div class="sec"><div class="sl">Add to home screen (iPhone)</div>
+      <div class="card"><div class="install-steps">
+        ${[['Open this URL in','Safari (not Chrome)'],['Tap','Share button — box with arrow pointing up'],['Scroll down, tap','Add to Home Screen'],['Tap','Add — top right corner'],['Open from home screen','behaves like a native app']].map((s,i)=>`<div class="install-step"><div class="step-num">${i+1}</div><div class="step-txt">${s[0]} <span class="step-bold">${s[1]}</span></div></div>`).join('')}
+      </div></div>
+    </div></div>`;
 }
 
 function rStats(){
-  const tot=S.smInt+S.smAuto;const pct=tot?Math.round(S.smInt/tot*100):0;
+  const tot=S.smInt+S.smAuto;
   const done=Object.values(S.techSt).filter(s=>s==='Got it'||s==='Feeling it').length;
+  const posDone=Object.values(S.posProgress||{}).filter(Boolean).length;
   const weeks=Math.max(1,Math.round((new Date()-new Date(S.start))/(7*86400000)));
+  const tasksDone=Object.values(S.tasks||{}).filter(Boolean).length;
+  const tasksTotal=getTasksForDay(dayType()).length;
+  const completionPct=tasksTotal?Math.round(tasksDone/tasksTotal*100):0;
+  const pct=tot?Math.round(S.smInt/tot*100):0;
   return`<div class="sec"><div class="sl">Your journey</div>
     <div class="sgrid">
       <div class="scard"><div class="snum" style="color:var(--acc)">${S.classes}</div><div class="slabel">classes logged</div></div>
-      <div class="scard"><div class="snum" style="color:var(--acc3)">${S.logs.length}</div><div class="slabel">sessions written</div></div>
+      <div class="scard"><div class="snum" style="color:var(--acc3)">${weeks}</div><div class="slabel">weeks in</div></div>
       <div class="scard"><div class="snum" style="color:var(--acc2)">${done}</div><div class="slabel">techniques feeling it+</div></div>
-      <div class="scard"><div class="snum" style="color:var(--tx)">${weeks}</div><div class="slabel">weeks in</div></div>
+      <div class="scard"><div class="snum" style="color:var(--ok)">${posDone}</div><div class="slabel">positions trained</div></div>
+    </div></div>
+  <div class="sec"><div class="sl">Today's completion</div>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-size:32px;font-weight:600;color:${completionPct===100?'var(--ok)':'var(--acc)'}">${completionPct}%</div>
+        <div>
+          <div style="font-size:13px;color:var(--tx)">${tasksDone} of ${tasksTotal} tasks done</div>
+          <div style="font-size:11px;color:var(--tx2);margin-top:2px">${completionPct===100?'Full day completed.':completionPct>=60?'Good progress today.':'Keep going — check off tasks as you do them.'}</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;height:6px;background:var(--s2);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${completionPct}%;background:${completionPct===100?'var(--ok)':'var(--acc)'};border-radius:3px;transition:width .3s"></div>
+      </div>
     </div></div>
   <div class="sec"><div class="sl">Technique progress</div>
     <div class="card">${TECHS.map(t=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:.5px solid var(--b1)">
-      <div style="font-size:12px;color:var(--tx);flex:1;padding-right:8px">${t.title}</div>
+      <div style="font-size:12px;color:var(--tx);flex:1;padding-right:8px">${t.title.split('—')[0].trim()}</div>
       <span class="tcs ${stCls(t.id)}">${stLbl(t.id)}</span></div>`).join('')}</div></div>
   <div class="sec"><div class="sl">Smoking — today</div>
     <div class="card">
@@ -546,7 +905,13 @@ function rStats(){
         <div class="scard"><div class="snum" style="color:var(--ok)">${S.smInt}</div><div class="slabel">intentional</div></div>
         <div class="scard"><div class="snum" style="color:var(--warn)">${S.smAuto}</div><div class="slabel">automatic</div></div>
       </div>
-      ${tot?`<div style="font-size:11px;color:var(--tx2);line-height:1.5">${pct}% intentional today. ${pct>60?'Good awareness — most are conscious choices.':'Mostly automatic — habit triggers, not cravings. Easier to replace.'}</div>`:'<div style="font-size:11px;color:var(--tx3)">Log from the Today tab.</div>'}
+      ${S.weeklySmAvg>0?`<div style="font-size:11px;color:var(--tx2)">Rolling average: ${S.weeklySmAvg}/day. ${tot>0?pct+'% intentional today.':''}</div>`:'<div style="font-size:11px;color:var(--tx3)">Building baseline — keep logging daily.</div>'}
+      ${S.smHistory&&S.smHistory.length>0?`<div style="margin-top:10px">
+        <div style="font-size:10px;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em">Last ${S.smHistory.length} days</div>
+        <div style="display:flex;gap:3px;align-items:flex-end;height:40px">
+          ${S.smHistory.slice(-10).map(d=>{const h=S.weeklySmAvg?Math.min(100,Math.round(d.total/S.weeklySmAvg*50)):25;const over=S.weeklySmAvg&&d.total>S.weeklySmAvg;return`<div style="flex:1;height:${Math.max(4,h)}%;background:${over?'var(--warn)':'var(--acc3)'};border-radius:2px;opacity:.7" title="${d.date}: ${d.total}"></div>`;}).join('')}
+        </div>
+      </div>`:''}
     </div></div>`;
 }
 
@@ -558,8 +923,7 @@ function init(){
   const badge=document.getElementById('dbadge');
   badge.textContent={bjj:'BJJ Day',drill:'Drilling Day',str:'Strength Day',rest:'Rest Day'}[type];
   badge.className='badge '+{bjj:'b-bjj',drill:'b-drl',str:'b-str',rest:'b-rst'}[type];
-  if(S.notifEnabled&&typeof Notification!=='undefined'&&Notification.permission==='granted')scheduleNotifs();
-  if('serviceWorker' in navigator)navigator.serviceWorker.register('/BJJ-os/sw.js', {scope: '/BJJ-os/'}).catch(()=>{});
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('/BJJ-os/sw.js',{scope:'/BJJ-os/'}).catch(()=>{});
   go('today');
 }
 init();
